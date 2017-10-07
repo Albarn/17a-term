@@ -4,3 +4,9 @@ D:\repos\labs\Software designing\L1\bin\Debug\L1.pdb
 D:\repos\labs\Software designing\L1\obj\Debug\L1.csprojResolveAssemblyReference.cache
 D:\repos\labs\Software designing\L1\obj\Debug\L1.exe
 D:\repos\labs\Software designing\L1\obj\Debug\L1.pdb
+D:\repos\17a-term\Software designing\L1\bin\Debug\L1.exe.config
+D:\repos\17a-term\Software designing\L1\obj\Debug\L1.exe
+D:\repos\17a-term\Software designing\L1\obj\Debug\L1.pdb
+D:\repos\17a-term\Software designing\L1\bin\Debug\L1.exe
+D:\repos\17a-term\Software designing\L1\bin\Debug\L1.pdb
+D:\repos\17a-term\Software designing\L1\obj\Debug\L1.csprojResolveAssemblyReference.cache
