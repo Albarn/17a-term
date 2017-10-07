@@ -1,0 +1,18 @@
+E:\Work\glAxes3D\bin\Debug\OpenGL WinForm Application.exe
+E:\Work\glAxes3D\bin\Debug\OpenGL WinForm Application.pdb
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.csprojResolveAssemblyReference.cache
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.Properties.Resources.resources
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.csproj.GenerateResource.Cache
+E:\Work\glAxes3D\obj\x86\Debug\OpenGL WinForm Application.exe
+E:\Work\glAxes3D\obj\x86\Debug\OpenGL WinForm Application.pdb
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.MainForm.resources
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.RenderControl.resources
+D:\repos\glAxes3D\obj\x86\Debug\OpenGL WinForm Application.exe
+D:\repos\glAxes3D\obj\x86\Debug\OpenGL WinForm Application.pdb
+D:\repos\glAxes3D\bin\Debug\OpenGL WinForm Application.exe
+D:\repos\glAxes3D\bin\Debug\OpenGL WinForm Application.pdb
+D:\repos\glAxes3D\obj\x86\Debug\glAxes3D.csprojResolveAssemblyReference.cache
+D:\repos\glAxes3D\obj\x86\Debug\glAxes3D.MainForm.resources
+D:\repos\glAxes3D\obj\x86\Debug\glAxes3D.Properties.Resources.resources
+D:\repos\glAxes3D\obj\x86\Debug\glAxes3D.RenderControl.resources
+D:\repos\glAxes3D\obj\x86\Debug\glAxes3D.csproj.GenerateResource.Cache

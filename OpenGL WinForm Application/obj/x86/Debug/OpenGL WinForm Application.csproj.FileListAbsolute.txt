@@ -1,0 +1,24 @@
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csprojResolveAssemblyReference.cache
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\obj\x86\Debug\$safeprojectname$.Properties.Resources.resources
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csproj.GenerateResource.Cache
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.exe
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.pdb
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\obj\x86\Debug\Proj.MainForm.resources
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.exe
+D:\some stuff\ИКГ-20170911T152031Z-001\ИКГ\Шаблоны приложений\Visual Studio C#\Templates\ProjectTemplates\Visual C#\Windows\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.pdb
+F:\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.exe
+F:\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.pdb
+F:\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.exe
+F:\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.pdb
+F:\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csprojResolveAssemblyReference.cache
+F:\OpenGL WinForm Application\obj\x86\Debug\Proj.MainForm.resources
+F:\OpenGL WinForm Application\obj\x86\Debug\$safeprojectname$.Properties.Resources.resources
+F:\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csproj.GenerateResource.Cache
+D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.exe
+D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.pdb
+D:\repos\OK\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.exe
+D:\repos\OK\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.pdb
+D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csprojResolveAssemblyReference.cache
+D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\Proj.MainForm.resources
+D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\$safeprojectname$.Properties.Resources.resources
+D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csproj.GenerateResource.Cache
