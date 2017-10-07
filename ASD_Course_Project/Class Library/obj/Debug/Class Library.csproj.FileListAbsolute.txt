@@ -1,0 +1,5 @@
+D:\repos\labs\ASD_Course_Project\Class Library\bin\Debug\Class Library.dll
+D:\repos\labs\ASD_Course_Project\Class Library\bin\Debug\Class Library.pdb
+D:\repos\labs\ASD_Course_Project\Class Library\obj\Debug\Class Library.csprojResolveAssemblyReference.cache
+D:\repos\labs\ASD_Course_Project\Class Library\obj\Debug\Class Library.dll
+D:\repos\labs\ASD_Course_Project\Class Library\obj\Debug\Class Library.pdb

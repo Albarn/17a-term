@@ -1,0 +1,8 @@
+D:\repos\labs\ASD_Course_Project\Console App\bin\Debug\Console App.exe.config
+D:\repos\labs\ASD_Course_Project\Console App\bin\Debug\Console App.exe
+D:\repos\labs\ASD_Course_Project\Console App\bin\Debug\Console App.pdb
+D:\repos\labs\ASD_Course_Project\Console App\bin\Debug\Class Library.dll
+D:\repos\labs\ASD_Course_Project\Console App\bin\Debug\Class Library.pdb
+D:\repos\labs\ASD_Course_Project\Console App\obj\Debug\Console App.csprojResolveAssemblyReference.cache
+D:\repos\labs\ASD_Course_Project\Console App\obj\Debug\Console App.exe
+D:\repos\labs\ASD_Course_Project\Console App\obj\Debug\Console App.pdb
