@@ -6,6 +6,7 @@ namespace L2
     {
         static void Main()
         {
+
             //чтение выражения
             string str = Console.ReadLine();
 

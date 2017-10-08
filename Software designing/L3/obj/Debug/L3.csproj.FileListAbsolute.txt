@@ -1,0 +1,6 @@
+D:\repos\17a-term\Software designing\L3\bin\Debug\L3.exe.config
+D:\repos\17a-term\Software designing\L3\bin\Debug\L3.exe
+D:\repos\17a-term\Software designing\L3\bin\Debug\L3.pdb
+D:\repos\17a-term\Software designing\L3\obj\Debug\L3.csprojResolveAssemblyReference.cache
+D:\repos\17a-term\Software designing\L3\obj\Debug\L3.exe
+D:\repos\17a-term\Software designing\L3\obj\Debug\L3.pdb
