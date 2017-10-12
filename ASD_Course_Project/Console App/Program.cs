@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Class_Library;
+﻿using Class_Library;
+using System;
 
 namespace Console_App
 {
@@ -21,10 +17,10 @@ namespace Console_App
                 int.TryParse(Console.ReadLine(), out c);
                 Console.Write("v:");
                 int.TryParse(Console.ReadLine(), out v);
-                Cell.Insert(new Cell(r, c, v), m);
+                m.Insert(new Cell(r, c, v));
                 Console.Write("stop?");
             } while (Console.ReadLine() != "Y");
-            Cell.InvertMatrix(m);
+            m.Invert();
             Matrix m2 = new Matrix();
             do
             {
@@ -35,10 +31,10 @@ namespace Console_App
                 int.TryParse(Console.ReadLine(), out c);
                 Console.Write("v:");
                 int.TryParse(Console.ReadLine(), out v);
-                Cell.Insert(new Cell(r, c, v), m2);
+                m2.Insert(new Cell(r, c, v));
                 Console.Write("stop?");
             } while (Console.ReadLine() != "Y");
-            Matrix er = Cell.MultiplyMatrixes(m, m2);
+            Matrix er = Matrix.MultiplyMatrixes(m, m2);
             return;
         }
     }
