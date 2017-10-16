@@ -47,8 +47,10 @@ namespace CppWinForm1 {
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
+		/// инициализация компонента
+		/// выполняется создание элементов управления
+		/// а также загрузка в раскрывающийся список
+		/// список дисков на устройстве
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -93,6 +95,7 @@ namespace CppWinForm1 {
 			this->Name = L"MyForm";
 			this->ResumeLayout(false);
 
+			//загружаем список дисков
 			DWORD disks = GetLogicalDrives();
 			for (int i = 64, j = 0; i > 0; i /= 2, j++) {
 				int a = disks - i;
@@ -109,7 +112,11 @@ namespace CppWinForm1 {
 			}
 		}
 #pragma endregion
+		//обработчик изменения выбранного диска в раскрывающемся списке
+		//здесь выполняется обновление информации о диске
 	private: System::Void comboBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+		
+		//параметры для метода получения информации о диске
 		WCHAR Root[MAX_PATH]; 
 		WCHAR NameBuffer[MAX_PATH];
 		WCHAR SysNameBuffer[MAX_PATH];
@@ -122,8 +129,9 @@ namespace CppWinForm1 {
 		GetVolumeInformation(Root, NameBuffer, sizeof(NameBuffer), 
 			&VSNumber, &MCLength, &FileSF, SysNameBuffer, sizeof(SysNameBuffer));
 		
+		//вывод значений параметров
 		label1->Text = "";
-		label1->Text += "метка: ";
+		label1->Text += "метка:                ";
 		for (int i = 0; Root[i] != '\0'; i++)
 			label1->Text += Root[i];
 		label1->Text += "\nсерийный номер:       ";
