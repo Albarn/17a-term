@@ -1,2 +1,4 @@
-﻿  l1.vcxproj -> D:\repos\labs\OS\Debug\l1.exe
-  l1.vcxproj -> D:\repos\labs\OS\Debug\l1.pdb (Full PDB)
+﻿  Source.cpp
+  LINK : D:\repos\17a-term\OS\Debug\l1.exe not found or not built by the last incremental link; performing full link
+  l1.vcxproj -> D:\repos\17a-term\OS\Debug\l1.exe
+  l1.vcxproj -> D:\repos\17a-term\OS\Debug\l1.pdb (Full PDB)
