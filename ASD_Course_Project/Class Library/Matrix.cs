@@ -52,8 +52,9 @@ namespace Class_Library
         }
         
 
-        public void Insert(Cell cell)
+        public void Insert(int x, int y, double v)
         {
+            Cell cell = new Cell(x, y, v);
             if (cell.val == 0) return;
             foreach (Cell c in this)
                 if (c.Col == cell.Col && c.Row == cell.Row)
@@ -100,8 +101,9 @@ namespace Class_Library
             cells.Add(cell);
         }
 
-        public void Remove(Cell cell)
+        public void Remove(int x, int y)
         {
+            Cell cell = this[x, y, 0];
             foreach (Cell c in this)
             {
                 if (c.Up == cell)
@@ -113,8 +115,9 @@ namespace Class_Library
             cells.Remove(cell);
         }
 
-        public void MakeStep(Cell centre)
+        public void MakeStep(int x, int y)
         {
+            Cell centre = this[x, y, 0];
             if (centre.val == 0) return;
 
             Cell hor = centre.Left;
@@ -140,12 +143,12 @@ namespace Class_Library
 
                     Cell cell = this[row, col,0];
                     if (cell == null)
-                        Insert(new Cell(row, col, -((ver.val * hor.val) / centre.val)));
+                        Insert(row, col, -((ver.val * hor.val) / centre.val));
                     else
                     {
                         cell.val -= (ver.val * hor.val) / centre.val;
                         if (cell.val == 0)
-                            Remove(cell);
+                            Remove(row, col);
                     }
 
                     ver = ver.Up;
@@ -194,7 +197,7 @@ namespace Class_Library
             {
                 Cell cell = this[i, i,0];
                 if (cell == null) return;
-                MakeStep(cell);
+                MakeStep(i,i);
             }
         }
 
@@ -229,7 +232,7 @@ namespace Class_Library
                             cell.val += o1.val * o2.val;
                     }
 
-                    res.Insert(cell);
+                    res.Insert(i, j, cell.val);
                 }
             }
 
