@@ -14,11 +14,13 @@ F:\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csprojRes
 F:\OpenGL WinForm Application\obj\x86\Debug\Proj.MainForm.resources
 F:\OpenGL WinForm Application\obj\x86\Debug\$safeprojectname$.Properties.Resources.resources
 F:\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csproj.GenerateResource.Cache
-D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.exe
-D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.pdb
-D:\repos\OK\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.exe
-D:\repos\OK\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.pdb
-D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csprojResolveAssemblyReference.cache
-D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\Proj.MainForm.resources
-D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\$safeprojectname$.Properties.Resources.resources
-D:\repos\OK\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csproj.GenerateResource.Cache
+F:\OpenGL WinForm Application\obj\x86\Debug\Proj.RenderControl.resources
+F:\repos\17a-term\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.exe
+F:\repos\17a-term\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.pdb
+F:\repos\17a-term\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csprojResolveAssemblyReference.cache
+F:\repos\17a-term\OpenGL WinForm Application\obj\x86\Debug\Proj.MainForm.resources
+F:\repos\17a-term\OpenGL WinForm Application\obj\x86\Debug\$safeprojectname$.Properties.Resources.resources
+F:\repos\17a-term\OpenGL WinForm Application\obj\x86\Debug\Proj.RenderControl.resources
+F:\repos\17a-term\OpenGL WinForm Application\obj\x86\Debug\OpenGL WinForm Application.csproj.GenerateResource.Cache
+F:\repos\17a-term\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.exe
+F:\repos\17a-term\OpenGL WinForm Application\bin\Debug\OpenGL WinForm Application.pdb

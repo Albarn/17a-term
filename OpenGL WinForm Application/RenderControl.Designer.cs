@@ -32,12 +32,12 @@
         {
             this.SuspendLayout();
             // 
-            // OGLControl1
+            // RenderControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.Name = "OGLControl1";
+            this.Name = "RenderControl";
             this.Size = new System.Drawing.Size(192, 115);
             this.ResumeLayout(false);
 
