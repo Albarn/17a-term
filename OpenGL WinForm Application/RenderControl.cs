@@ -70,7 +70,7 @@ namespace Proj
             gluOrtho2D(xmin / 10, xmax / 10, ymin / 10, (ymin + xmax - xmin) / 10);
 
             List<Point> points = new List<Point>();
-            float xold = 0, yold = 0;
+            float xold = start, yold = y0;
             float xt = 0, yt = 0;
             //строим график
             glBegin(GL_LINE_STRIP);
@@ -106,12 +106,40 @@ namespace Proj
                 yold = y;
             }
             glEnd();
+
+            xold = yold = 0;
             glBegin(GL_LINE_STRIP);
             for (int i = 0; i < n; i++)
             {
                 float x = start + d * i;
                 float y = f1N(x);
                 glVertex3f(x / 10, y / 10, 0);
+
+
+                //пересечение отрезков
+                if (i != 0 && x > x1 && xold < x2)
+                {
+                    //коэффициенты при параметрах
+                    float tx1 = x2 - x1;
+                    float tx2 = x - xold;
+                    float ty1 = y2 - y1;
+                    float ty2 = y - yold;
+
+                    //значение параметров
+                    float tb = (tx1 * (y - y1) - ty1 * (x - x1)) / (ty1 * tx2 - tx1 * ty2);
+                    if (ty1 * tx2 - tx1 * ty2 == 0) tb = 0;
+                    float ta = (x - x1 + tx2 * tb) / tx1;
+
+                    if (x1 + tx1 * ta >= xold && x1 + tx1 * ta <= x + d / 5)
+                    {
+                        xt = x1 + tx1 * ta;
+                        yt = y1 + ty1 * ta;
+                        points.Add(new Point(xt, yt));
+                    }
+                }
+
+                xold = x;
+                yold = y;
             }
             glEnd();
 

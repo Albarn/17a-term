@@ -140,7 +140,7 @@ namespace Proj
         private void bTextBox_TextChanged(object sender, System.EventArgs e)
         {
             float b;
-            float.TryParse(aTextBox.Text, out b);
+            float.TryParse(bTextBox.Text, out b);
             if (b >= -10 && b <= 10) renderControl1.b = b;
             renderControl1.Invalidate();
         }
