@@ -17,7 +17,7 @@ namespace Console_App
                 int.TryParse(Console.ReadLine(), out c);
                 Console.Write("v:");
                 int.TryParse(Console.ReadLine(), out v);
-                m.Insert(new Cell(r, c, v));
+                m[r, c] = v;
                 Console.Write("stop?");
             } while (Console.ReadLine() != "Y");
             m.Invert();
@@ -31,7 +31,7 @@ namespace Console_App
                 int.TryParse(Console.ReadLine(), out c);
                 Console.Write("v:");
                 int.TryParse(Console.ReadLine(), out v);
-                m2.Insert(new Cell(r, c, v));
+                m2[r, c] = v;
                 Console.Write("stop?");
             } while (Console.ReadLine() != "Y");
             Matrix er = Matrix.MultiplyMatrixes(m, m2);

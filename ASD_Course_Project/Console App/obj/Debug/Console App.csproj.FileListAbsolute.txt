@@ -9,3 +9,8 @@ D:\repos\labs\ASD_Course_Project\Console App\obj\Debug\Console App.pdb
 F:\repos\17a-term\ASD_Course_Project\Console App\bin\Debug\Console App.exe.config
 F:\repos\17a-term\ASD_Course_Project\Console App\obj\Debug\Console App.exe
 F:\repos\17a-term\ASD_Course_Project\Console App\obj\Debug\Console App.pdb
+F:\repos\17a-term\ASD_Course_Project\Console App\bin\Debug\Console App.exe
+F:\repos\17a-term\ASD_Course_Project\Console App\bin\Debug\Console App.pdb
+F:\repos\17a-term\ASD_Course_Project\Console App\bin\Debug\Class Library.dll
+F:\repos\17a-term\ASD_Course_Project\Console App\bin\Debug\Class Library.pdb
+F:\repos\17a-term\ASD_Course_Project\Console App\obj\Debug\Console App.csprojResolveAssemblyReference.cache

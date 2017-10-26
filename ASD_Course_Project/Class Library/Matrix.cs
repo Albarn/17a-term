@@ -1,17 +1,77 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Class_Library
 {
+    /// <summary>
+    /// разряженная матрица
+    /// </summary>
     public class Matrix:IEnumerable<Cell>
     {
+        /// <summary>
+        /// список узлов
+        /// </summary>
         List<Cell> cells;
 
+        bool changed = false;
+        int pow = 0;
+        public int Size
+        {
+            get
+            {
+                if (changed)
+                {
+                    //вычисляем ранг матрицы
+                    pow = 0;
+                    foreach (Cell c in this)
+                    {
+                        if (c.Row > pow) pow = c.Row;
+                        if (c.Col > pow) pow = c.Col;
+                    }
+                    changed = false;
+                }
+                return pow;
+            }
+        }
+
+        /// <summary>
+        /// создание пустой матрицы
+        /// </summary>
         public Matrix()
         {
             cells = new List<Cell>();
         }
 
+        /// <summary>
+        /// создание случайной матрицы
+        /// </summary>
+        /// <param name="size">ранг</param>
+        /// <param name="density">плотность(от 0 до 1)</param>
+        public Matrix(int size, float density)
+        {
+            Random f = new Random(DateTime.Now.Millisecond);
+            cells = new List<Cell>();
+
+            //заполняем главную диагональ
+            for (int i = 1; i <= size; i++)
+                this[i, i] = f.Next(100, 10000) / 100f;
+
+            //оставшееся количество узлов, что нужно добавить
+            int count = (int)(size * size * density) - size;
+            while (count > 0)
+            {
+                int i = f.Next(1, size + 1);
+                int j = f.Next(1, size + 1);
+                if (this[i, j] == 0)
+                {
+                    this[i, j] = f.Next(100, 10000) / 100f;
+                    count--;
+                }
+            }
+        }
+
+        //методы поддержки перечисления коллекции cells
         public IEnumerator<Cell> GetEnumerator()
         {
             return ((IEnumerable<Cell>)cells).GetEnumerator();
@@ -22,106 +82,197 @@ namespace Class_Library
             return ((IEnumerable<Cell>)cells).GetEnumerator();
         }
 
+        /// <summary>
+        /// индексация со взятием ячейки
+        /// </summary>
+        /// <param name="row">строка</param>
+        /// <param name="col">столбец</param>
+        /// <param name="t">параметр для перегрузки</param>
         Cell this[int row, int col, int t]
         {
             get {
                 foreach (Cell cell in cells)
-                    if (cell.Row == row && cell.Col == col)
-                        return cell;
+                    //перебираем до совпадения и возвращаем поле val
+                    if (cell.Row == row)
+                    {
+                        Cell c = cell;
+                        do
+                        {
+                            if (c.Col == col)
+                                return c;
+                            c = c.Left;
+                        } while (c != cell);
+                        return null;
+                    }
+                else if (cell.Col == col)
+                    {
+                        Cell c = cell;
+                        do
+                        {
+                            if (c.Row == row)
+                                return c;
+                            c = c.Up;
+                        } while (c != cell);
+                        return null;
+                    }
                 return null;
             }
         }
 
+        /// <summary>
+        /// индексация со взятием значения
+        /// </summary>
+        /// <param name="row">строка</param>
+        /// <param name="col">столбец</param>
         public double this[int row, int col]
         {
             get
             {
-                foreach (Cell cell in cells)
-                    if (cell.Row == row && cell.Col == col)
-                        return cell.val;
-                return 0;
+                Cell res = this[row, col, 0];
+
+                if (res != null) return res.val;
+                else
+                    //если узла в списке нет - это ноль
+                    return 0;
             }
             set {
-                foreach (Cell cell in cells)
-                    if (cell.Row == row && cell.Col == col)
-                    {
-                        cell.val = value;
-                        return;
-                    }
+                Cell c = this[row, col, 0];
+                if (c == null)
+                {
+                    //если такого узла нет, его нужно вставить
+                    Insert(row, col, value);
+                }
+                else
+                {
+                    c.val = value;
+                    if (c.val == 0) Remove(c.Row, c.Col);
+                }
             }
         }
         
-
-        public void Insert(int x, int y, double v)
+        /// <summary>
+        /// вставка нового узла в матрицу
+        /// </summary>
+        /// <param name="i">строка</param>
+        /// <param name="j">столбец</param>
+        /// <param name="v">значение</param>
+        void Insert(int i, int j, double v)
         {
-            Cell cell = new Cell(x, y, v);
+
+            //создаем ячейку и проверяем на ноль
+            Cell cell = new Cell(i, j, v);
             if (cell.val == 0) return;
+
+            //если узел в этом месте уже есть,
+            //операция неверна
             foreach (Cell c in this)
                 if (c.Col == cell.Col && c.Row == cell.Row)
                     return;
 
+            //если в матрице есть узлы
             if (cells.Count > 0)
             {
-                bool row = true, col = true;
+                //ищем соседнюю ячейку
                 foreach (Cell c in this)
-                    if (!row && !col)
-                        break;
-                    else if (c.Row == cell.Row &&
-                        c.Col > cell.Col &&
-                        (c.Left.Col < cell.Col || c.Left.Col == -1))
-                    {
-                        cell.Left = c.Left;
-                        c.Left = cell;
-                        row = false;
-                    }
-                    else if (c.Col == cell.Col &&
-                            c.Row > cell.Row &&
-                            (c.Up.Row < cell.Row || c.Up.Row == -1))
-                    {
-                        cell.Up = c.Up;
-                        c.Up = cell;
-                        col = false;
-                    }
 
-                if (row)
-                    foreach (Cell c in this)
-                        if (c.Col == cell.Col && c.Up.Row == -1)
+                    //если узел на той же строке и между текущей ячейкой
+                    //и следующей добавляем ссылки
+                    if (c.Row == cell.Row)
+                    {
+                        if (c.Col > cell.Col &&
+                        (c.Left.Col < cell.Col || c.Left.Col == -1))
                         {
-                            cell.Up = c.Up.Up;
-                            c.Up.Up = cell;
+                            cell.Left = c.Left;
+                            c.Left = cell;
                         }
-                if (col)
-                    foreach (Cell c in this)
-                        if (c.Row == cell.Row && c.Left.Col == -1)
+                        else if (c.Col < cell.Col && c.Left.Col == -1 &&
+                            c.Left.Left.Col < cell.Col)
                         {
-                            cell.Left = c.Left.Left;
-                            c.Left.Left = cell;
+                            if (c.Left.Left == c)
+                            {
+                                c.Left.Left = cell;
+                                cell.Left = c;
+                            }
+                            else
+                            {
+                                cell.Left = c.Left.Left;
+                                c.Left.Left = cell;
+                            }
                         }
+                    }
+                    //аналогично для столбца
+                    else if (c.Col == cell.Col)
+                    {
+                        if (c.Row > cell.Row &&
+                            (c.Up.Row < cell.Row || c.Up.Row == -1))
+                        {
+                            cell.Up = c.Up;
+                            c.Up = cell;
+                        }
+                        else if (c.Row < cell.Row && c.Up.Row == -1 &&
+                            c.Up.Up.Row < cell.Row)
+                        {
+                            if (c.Up.Up == c)
+                            {
+                                cell.Up = c;
+                                c.Up.Up = cell;
+                            }
+                            else
+                            {
+                                cell.Up = c.Up.Up;
+                                c.Up.Up = cell;
+                            }
+                        }
+                    }
             }
+
+            //и наконец добавляем узел в список ячеек матрицы
             cells.Add(cell);
+            changed = true;
         }
 
-        public void Remove(int x, int y)
+        /// <summary>
+        /// удаление узла из матрицы
+        /// </summary>
+        /// <param name="i">строка</param>
+        /// <param name="j">столбец</param>
+        void Remove(int i, int j)
         {
-            Cell cell = this[x, y, 0];
+            Cell cell = this[i, j, 0];
             foreach (Cell c in this)
             {
+                //делаем обход удалемой ячейки
                 if (c.Up == cell)
                     c.Up = cell.Up;
                 if (c.Left == cell)
                     c.Left = cell.Left;
             }
 
+            //и удаляем узел из списка ячеек
             cells.Remove(cell);
+            changed = true;
         }
 
-        public void MakeStep(int x, int y)
+        /// <summary>
+        /// шаг ОЖИ
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        public void MakeStep(int i, int j)
         {
-            Cell centre = this[x, y, 0];
+            //Шаг 1.[Начальная установка]
+            //получаем ячейку и проверяем на равенство нулю
+            Cell centre = this[i, j, 0];
             if (centre.val == 0) return;
 
+            //Шаг 2.[Найти новый столбец]
+            //начинаем обработку узлов, что не принадлежат
+            //осевой строке/столбцу
+            //сдвигаемся от осевого элемента
             Cell hor = centre.Left;
             Cell ver;
+
+            //и ведем цикл пока на него не наткнемся
             while (hor != centre)
             {
                 int col = hor.Col;
@@ -131,6 +282,8 @@ namespace Class_Library
                     continue;
                 }
 
+                //Шаг 3.[Найти новую строку]
+                //такой же цикл для столбца
                 ver = centre.Up;
                 while (ver != centre)
                 {
@@ -141,6 +294,9 @@ namespace Class_Library
                         continue;
                     }
 
+                    //Шаг 4.[Осевая операция]
+                    //если элемента не было, добавляем
+                    //если обнулился, убираем
                     Cell cell = this[row, col,0];
                     if (cell == null)
                         Insert(row, col, -((ver.val * hor.val) / centre.val));
@@ -157,6 +313,7 @@ namespace Class_Library
                 hor = hor.Left;
             }
 
+            //Шаг 5.[Обработка осевой строки]
             hor = centre.Left;
             while (hor != centre)
             {
@@ -169,6 +326,7 @@ namespace Class_Library
                 hor = hor.Left;
             }
 
+            //Шаг 6.[Обработка осевого столбца]
             ver = centre.Up;
             while (ver != centre)
             {
@@ -181,11 +339,16 @@ namespace Class_Library
                 ver = ver.Up;
             }
 
+            //Шаг 7.[Обработка осевого элемента]
             centre.val = 1 / centre.val;
         }
 
+        /// <summary>
+        /// обращение матрицы
+        /// </summary>
         public void Invert()
         {
+            //вычисляем ранг матрицы
             int pow = 0;
             foreach (Cell c in this)
             {
@@ -193,17 +356,29 @@ namespace Class_Library
                 if (c.Col > pow) pow = c.Col;
             }
 
+            //проверка главной диагонали,
+            //не должно быть нулевых элементов
             for (int i = 1; i <= pow; i++)
-            {
-                Cell cell = this[i, i,0];
-                if (cell == null) return;
+                if (this[i, i] == 0) return;
+
+            //для элементов главной диагонали вызываем
+            //метод ОЖИ
+            for (int i = 1; i <= pow; i++)
                 MakeStep(i,i);
-            }
         }
 
+        /// <summary>
+        /// умножение матриц
+        /// </summary>
+        /// <param name="op1">левый операнд</param>
+        /// <param name="op2">правый операнд</param>
+        /// <returns></returns>
         static public Matrix MultiplyMatrixes(Matrix op1, Matrix op2)
         {
+            //правая часть выражения
             Matrix res = new Matrix();
+
+            //размеры матриц
             int r1, r2, c1, c2;
             r1 = r2 = c1 = c2 = 0;
             foreach (Cell c in op1)
@@ -216,26 +391,26 @@ namespace Class_Library
                 if (c.Row > r2) r2 = c.Row;
                 if (c.Col > c2) c2 = c.Col;
             }
+            //общий размер
             int size = r2 > c1 ? c1 : r2;
 
+            //выполняем умножение по правилу строка на столбец
             for (int i = 1; i <= r1; i++)
-            {
                 for (int j = 1; j <= c2; j++)
-                {
-                    Cell cell = new Cell(i, j);
-
                     for (int k = 1; k <= size; k++)
-                    {
-                        Cell o1 = op1[i, k,0];
-                        Cell o2 = op2[k, j,0];
-                        if (o1 != null && o2 != null)
-                            cell.val += o1.val * o2.val;
-                    }
+                        res[i, j] += op1[i, k] * op2[k, j];
 
-                    res.Insert(i, j, cell.val);
-                }
-            }
+            return res;
+        }
 
+        /// <summary>
+        /// копирование матрицы
+        /// </summary>
+        public Matrix Copy()
+        {
+            Matrix res = new Matrix();
+            foreach (Cell cell in cells)
+                res[cell.Row, cell.Col] = cell.val;
             return res;
         }
     }

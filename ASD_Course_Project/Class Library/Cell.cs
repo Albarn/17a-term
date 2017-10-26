@@ -30,8 +30,15 @@
         /// </summary>
         public double val;
 
+        /// <summary>
+        /// создание обычного узла
+        /// </summary>
+        /// <param name="row">номер строки</param>
+        /// <param name="col">номер столбца</param>
+        /// <param name="val">значение</param>
         public Cell(int row, int col, double val = 0)
         {
+            //заполняем поля и добавляем конечные узлы
             Row = row;
             Col = col;
             this.val = val;
@@ -39,14 +46,25 @@
             Left = new Cell(this, true);
         }
 
+        /// <summary>
+        /// конечный узел
+        /// </summary>
+        /// <param name="c">соседняя ячейка</param>
+        /// <param name="isRow">это строковый узел</param>
         Cell(Cell c, bool isRow)
         {
+            //если строковый
             if (isRow)
             {
+                //он выходит за пределы матрицы
                 Col = -1;
                 Row = 0;
+
+                //и ссылается на соседнюю ячейку,
+                //образуя цикл
                 Left = c;
             }
+            //аналогично для столбца
             else
             {
                 Col = 0;
