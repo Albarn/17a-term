@@ -1,12 +1,5 @@
 ﻿using Class_Library;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinForm_App
@@ -20,6 +13,7 @@ namespace WinForm_App
         public Form1()
         {
             InitializeComponent();
+            sizeNumericUpDown_ValueChanged(null, null);
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -31,13 +25,17 @@ namespace WinForm_App
         {
             int size = (int)sizeNumericUpDown.Value;
             dataGridView1.Columns.Clear();
+            dataGridView2.Columns.Clear();
+            dataGridView2.Columns.Add("", "X");
+            dataGridView2.Columns[dataGridView2.Columns.Count - 1].Width = 50;
             for (int i = 0; i < size; i++)
             {
                 dataGridView1.Columns.Add("c" + i, (i + 1).ToString());
                 dataGridView1.Columns[dataGridView1.Columns.Count - 1].Width = 50;
                 dataGridView1.Rows.Add("", "");
                 dataGridView1.Rows[dataGridView1.Rows.Count - 1].HeaderCell.Value = (i + 1).ToString();
-
+                dataGridView2.Rows.Add("", "");
+                dataGridView2.Rows[dataGridView2.Rows.Count - 1].HeaderCell.Value = (i + 1).ToString();
             }
             dataGridView1.Columns.Add("a", "A");
             dataGridView1.Columns[dataGridView1.Columns.Count - 1].Width = 50;
@@ -72,13 +70,13 @@ namespace WinForm_App
             B = new Matrix(size, (float)trackBar1.Value / 20);
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
-                    dataGridView1[i, j].Value = B[i + 1, j + 1].ToString("F2");
+                    dataGridView1[j, i].Value = B[i + 1, j + 1].ToString("F2");
             A = new Matrix();
             int count = (int)(size * (float)trackBar1.Value / 20);
             Random f = new Random(DateTime.Now.Millisecond);
             while (count > 0)
             {
-                A[f.Next(1, size + 1), 1] = (float)f.Next(100, 10000) / 100;
+                A[f.Next(1, size + 1), 1] = f.Next(100, 10000) / 100;
                 count--;
             }
             for (int i = 0; i < size; i++)
@@ -90,13 +88,18 @@ namespace WinForm_App
         private void resolveButton_Click(object sender, EventArgs e)
         {
             Matrix V = B.Copy();
-            V.Invert();
-            Matrix res = Matrix.MultiplyMatrixes(V, A);
-            int size = res.Size;
-            richTextBox1.Text = "";
-            for (int i = 0; i < res.Size; i++)
-                richTextBox1.Text += "x" + (i + 1) + ": " + 
-                    res[i + 1, 1].ToString("F2") + " ";
+            if (!V.Invert() || B.Size != (int)sizeNumericUpDown.Value)
+            {
+                MessageBox.Show("главная диагональ содержит нули,\n" +
+                    "обратную матрицу вычислить нельзя");
+                MessageBox.Show("при текущих данных решение найти нельзя,\n" +
+                    "заполните главную диагональ таблицы");
+                return;
+            }
+            Matrix X = Matrix.MultiplyMatrixes(V, A);
+            for (int i = 0; i < B.Size; i++)
+                dataGridView2.Rows[i].Cells[0].Value =
+                    X[i + 1, 1].ToString("F2");
         }
     }
 }

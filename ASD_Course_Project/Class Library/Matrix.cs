@@ -258,12 +258,12 @@ namespace Class_Library
         /// </summary>
         /// <param name="i"></param>
         /// <param name="j"></param>
-        public void MakeStep(int i, int j)
+        public bool MakeStep(int i, int j)
         {
             //Шаг 1.[Начальная установка]
             //получаем ячейку и проверяем на равенство нулю
             Cell centre = this[i, j, 0];
-            if (centre.val == 0) return;
+            if (centre.val == 0) return false;
 
             //Шаг 2.[Найти новый столбец]
             //начинаем обработку узлов, что не принадлежат
@@ -341,12 +341,14 @@ namespace Class_Library
 
             //Шаг 7.[Обработка осевого элемента]
             centre.val = 1 / centre.val;
+
+            return true;
         }
 
         /// <summary>
         /// обращение матрицы
         /// </summary>
-        public void Invert()
+        public bool Invert()
         {
             //вычисляем ранг матрицы
             int pow = 0;
@@ -359,12 +361,14 @@ namespace Class_Library
             //проверка главной диагонали,
             //не должно быть нулевых элементов
             for (int i = 1; i <= pow; i++)
-                if (this[i, i] == 0) return;
+                if (this[i, i] == 0) return false;
 
             //для элементов главной диагонали вызываем
             //метод ОЖИ
             for (int i = 1; i <= pow; i++)
-                MakeStep(i,i);
+                if (!MakeStep(i, i))
+                    return false;
+            return true;
         }
 
         /// <summary>
