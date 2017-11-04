@@ -1,0 +1,5 @@
+F:\repos\17a-term\Software designing\L2\bin\Debug\L2.exe.config
+F:\repos\17a-term\Software designing\L2\bin\Debug\L2.exe
+F:\repos\17a-term\Software designing\L2\bin\Debug\L2.pdb
+F:\repos\17a-term\Software designing\L2\obj\Debug\L2.exe
+F:\repos\17a-term\Software designing\L2\obj\Debug\L2.pdb

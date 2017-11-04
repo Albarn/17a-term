@@ -1,0 +1,8 @@
+F:\repos\17a-term\Software designing\Hw\bin\Debug\Hw.exe.config
+F:\repos\17a-term\Software designing\Hw\bin\Debug\Hw.exe
+F:\repos\17a-term\Software designing\Hw\bin\Debug\Hw.pdb
+F:\repos\17a-term\Software designing\Hw\bin\Debug\L3.exe
+F:\repos\17a-term\Software designing\Hw\bin\Debug\L3.pdb
+F:\repos\17a-term\Software designing\Hw\obj\Debug\Hw.csprojResolveAssemblyReference.cache
+F:\repos\17a-term\Software designing\Hw\obj\Debug\Hw.exe
+F:\repos\17a-term\Software designing\Hw\obj\Debug\Hw.pdb

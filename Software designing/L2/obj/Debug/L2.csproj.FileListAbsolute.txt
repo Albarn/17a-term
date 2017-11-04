@@ -4,3 +4,6 @@ D:\repos\17a-term\Software designing\L2\bin\Debug\L2.pdb
 D:\repos\17a-term\Software designing\L2\obj\Debug\L2.exe
 D:\repos\17a-term\Software designing\L2\obj\Debug\L2.pdb
 D:\repos\17a-term\Software designing\L2\obj\Debug\L2.csprojResolveAssemblyReference.cache
+F:\repos\17a-term\Software designing\L2\bin\Debug\L2.exe.config
+F:\repos\17a-term\Software designing\L2\obj\Debug\L2.exe
+F:\repos\17a-term\Software designing\L2\obj\Debug\L2.pdb

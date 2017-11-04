@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace L3
+namespace L4
 {
-    class Vector
+    public class Vector
     {
         public int x, y, z;
         
