@@ -33,13 +33,11 @@
             // 
             // renderControl1
             // 
-            this.renderControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.renderControl1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.renderControl1.Location = new System.Drawing.Point(12, 12);
+            this.renderControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.renderControl1.Location = new System.Drawing.Point(0, 0);
             this.renderControl1.Name = "renderControl1";
-            this.renderControl1.Size = new System.Drawing.Size(350, 330);
+            this.renderControl1.Size = new System.Drawing.Size(504, 354);
             this.renderControl1.TabIndex = 0;
             // 
             // MainForm

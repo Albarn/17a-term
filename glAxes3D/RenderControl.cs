@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System;
 
 namespace glAxes3D
 {
@@ -30,21 +31,71 @@ namespace glAxes3D
             glRotated(ry, 0, 1, 0);
             glScaled(m, m, m);
             DrawAxes(size, 3);
-            //OutText("OpenGL version - " + glGetString(GL_VERSION), 10, (3 + FontHeight) * 1);
-            //OutText("OpenGL vendor - " + glGetString(GL_VENDOR), 10, (3 + FontHeight) * 2);
-            // OutText( "Cyrilic test  - ъЪ эЭ юЮ яЯ ёЁ іІ їЇ", 10,(3 + FontHeight) * 3);
+
+            glLineWidth(3 / 2f);
+            glColor(System.Drawing.Color.Red);
+            double x1 = 2 * size / 5, y1 = -1.5 * size / 5, z1 = -2 * size / 5, 
+                r1 = 1 * size / 5;
+            glTranslated(x1, y1, z1);
+            IntPtr q = gluNewQuadric();
+            gluQuadricDrawStyle(q, GL_LINE);
+            gluSphere(q, r1, 8, 8);
+            glTranslated(-x1, -y1, -z1);
+
+            glColor(System.Drawing.Color.Yellow);
+            double x2 = -2.5 * size / 5, y2 = -2 * size / 5, z2 = -2.5 * size / 5,
+                r2 = 1 * size / 5, h2 = 1.5;
+            glTranslated(x2, y2, z2);
+            glRotated(90, 1, 0, 0);
+            q = gluNewQuadric();
+            gluQuadricDrawStyle(q, GL_LINE);
+            gluCylinder(q, r2, r2, h2, 8, 8);
+            glRotated(-90, 1, 0, 0);
+            glTranslated(-x2, -y2, -z2);
+
+            glColor(System.Drawing.Color.Blue);
+            double x3 = -3 * size / 5, y3 = -3 * size / 5, z3 = 1.5 * size / 5,
+                r3 = 1 * size / 5;
+            glTranslated(x3, y3, z3);
+            glRotated(90, 1, 0, 0);
+            q = gluNewQuadric();
+            gluQuadricDrawStyle(q, GL_LINE);
+            gluDisk(q, 0, r3, 8, 4);
+            glRotated(-90, 1, 0, 0);
+            glTranslated(-x3, -y3, -z3);
         }
 
         private void DrawAxes(double size, float w)
         {
-            glLineWidth(w);
+            glLineWidth(w/2);
+
+            glLineStipple(1, 255);
+            glEnable(GL_LINE_STIPPLE);
+            glColor(System.Drawing.Color.Gray);
+            glBegin(GL_LINES);
+            for (double i = -size; i <= size; i += size / 5)
+            {
+                if (i != 0)
+                {
+                    glVertex3d(-size, 0, i);
+                    glVertex3d(size, 0, i);
+                    glVertex3d(i, 0, -size);
+                    glVertex3d(i, 0, size);
+                }
+            }
+            glEnd();
+            glDisable(GL_LINE_STIPPLE);
+            glColor(System.Drawing.Color.Black);
+
+
+            glLineWidth(w / 2);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glBegin(GL_LINES);
-            glVertex3d(-size / 10, 0, 0);
+            glVertex3d(-size, 0, 0);
             glVertex3d(size, 0, 0);
-            glVertex3d(0, -size / 10, 0);
+            glVertex3d(0, -size, 0);
             glVertex3d(0, size, 0);
-            glVertex3d(0, 0, -size / 10);
+            glVertex3d(0, 0, -size);
             glVertex3d(0, 0, size);
             glEnd();
             OutText("X", size, 0, 0);
