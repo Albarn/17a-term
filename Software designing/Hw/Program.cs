@@ -1,179 +1,401 @@
 ﻿using L4;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Hw
 {
     class Program
     {
+        static readonly string[] lexemes =
+        {
+            "NAME",
+            "STRING",
+            "INT",
+            "bool",
+            "string",
+            "int",
+            "static",
+            "ref",
+            "if",
+            "else",
+            "return",
+            "Console.WriteLine",
+            "true",
+            "false",
+            "{",
+            "}",
+            "(",
+            ")",
+            "[",
+            "]",
+            "\"",
+            "\"",
+            ".",
+            ";",
+            "=",
+            ",",
+            "&&",
+            ">",
+            ">=",
+            "<=",
+            "+",
+            "*"
+        };
+
         static void Main()
         {
             //чтение выражения
-            string str = Console.ReadLine();
 
-            List<Vector> res;
-            bool b = _List(str, 0, str.Length - 1, out res);
-            //вызов процедуры начального терминала на всей строке
+            string code = Console.ReadLine();
+            while (true)
+            {
+                string str = Console.ReadLine();
+                if (str == "STOP") break;
+                code += "\n" + str;
+            }
+
+            StringBuilder con = new StringBuilder();
+            bool b = Parametr(code, 0, code.Length - 1, con);
             Console.WriteLine(b);
-            Console.WriteLine("Свертка:");
-            _ConList(res);
+            if (b)
+                Console.WriteLine(con);
 
             //выход по нажатию кнопки
             Console.Read();
         }
 
-        /// <summary>
-        /// свертка списка векторов
-        /// </summary>
-        /// <param name="list">список</param>
-        static void _ConList(List<Vector> list)
+
+
+        
+        private static bool Value(string code, int b, int v, StringBuilder con)
         {
-            //если список не пуст
-            if (list.Count != 0)
-            {
-
-                //выводим вектор
-                _ConVector(list[0]);
-                for(int i = 1; i < list.Count; i++)
-                {
-
-                    //следующие вектора выводятся после запятой
-                    Console.Write(", 2, ");
-                    _ConVector(list[i]);
-                }
-            }
+            return true;
         }
 
-        /// <summary>
-        /// процедура свертки вектора
-        /// </summary>
-        /// <param name="vector">вектор</param>
-        static void _ConVector(Vector vector)
-        {
-            Console.Write("3, ");                   //открывающая скобка
-            Console.Write("1." + vector.x + ", ");  //первое целое
-            Console.Write("2, ");                   //запятая
-            Console.Write("1." + vector.y + ", ");  //второе целое
-            Console.Write("2, ");                   //запятая
-            Console.Write("1." + vector.z + ", ");  //третье целое
-            Console.Write("4");                     //закрывающаяся скобка
-        }
 
         /// <summary>
-        /// распознавание списка векторов
+        /// проверка параметра
         /// </summary>
-        /// <param name="s">строка</param>
-        /// <param name="b">индекс первого элемента выражения</param>
-        /// <param name="e">индекс последнего элемента выражения</param>
-        /// <returns>результат анализа</returns>
-        static bool _List(string s, int b, int e, out List<Vector> res)
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool Parametr(string code, int b, int e, StringBuilder con)
         {
-            res = new List<Vector>();
-            //если пустая цепочка возвращаем истину
-            if (b > e)
-                return true;
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
+                return false;
 
-            //иначе есть нетерминал Вектор
+            //пропускаем пробелы в начале
             int i = b;
-            for (; i <= e && i < s.Length; i++)
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
 
-                //А - вектор, его конец - 
-                //закрывающаяся скобка
-                if (s[i] == ')') break;
+            //проверяем две альтернативы
+            StringBuilder sb1 = new StringBuilder(con.ToString());//арифметическое выражение
 
-            Vector a;
-            //если это не вектор возвращаем ложь
-            if (!_Vector(s, b, i, out a)) return false;
-
-            res.Add(a);
-
-            //если следующих векторов нет, возвращаем истину
-            if (i == s.Length - 1)
-                return true;
-
-            //переходим к следующему вектору
-            i++;
-
-            //пока не дойдем до конца строки
-            //читаем вектора
-            while (i < s.Length)
+            bool b1 = false, b2 = false;
+            b1 = ArithmeticExpression(code, i, e, sb1);
+            if (b1)
             {
-                //после вектора должна быть запятая
-                if (s[i] != ',')
-                {
-                    Console.WriteLine("На позиции " + (i + 1) + " ожидался символ ','");
-                    return false;
-                }
-
-                //находим границы вектора и читаем его
-                b = i + 1;
-                for (; i < s.Length && s[i] != ')'; i++) ;
-                if (!_Vector(s, b, i, out a)) return false;
-                res.Add(a);
-
-                //переходим к следующему вектору
-                i++;
+                con.Clear();
+                con.Append(sb1);
+                return true;
             }
 
-            //мы закончили работу и возвращаем истину
+
+            StringBuilder sb2 = new StringBuilder(con.ToString());//[ref] ИМЯ
+            if (code.Substring(i, 3) != lexemes[7])
+                b2 = false;
+            else
+            {
+                sb2.Append(", 8, ");
+                i += 3;
+                if (code[i] != ' ')
+                    b2 = false;
+                else
+                {
+                    b2 = NAME(code, i, e, sb2);
+                }
+            }
+            if (b2)
+            {
+                con.Clear();
+                con.Append(sb2);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// проверка арифметического выражения
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool ArithmeticExpression(string code, int b, int e, StringBuilder con)
+        {
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
+                return false;
+            
+            //пропускаем пробелы в начале
+            int i = b;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+            //идем до разделителя/оператора, проверяем есть ли значение
+
+            for (; i <= e &&
+                !char.IsSeparator(code[i]) &&
+                code[i] != '+' && code[i] != '*'; i++) ;
+
+            if (!Value(code, b, i - 1, con))
+                return false;
+            
+            //проверяем остальную часть выражения
+            while (i<=e)
+            {
+                //опускаем пробелы
+                for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+                if (i > e) break;
+                
+                //два значения должен связывать оператор
+                if (code[i] == '+')
+                    con.Append(", 31");
+                else if (code[i] == '*')
+                    con.Append(", 32");
+                else
+                    return false;
+
+                i++;
+                //опускаем пробелы
+                for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+                //ищем пределы значения
+                b = i;
+                for (; i <= e &&
+                !char.IsSeparator(code[i]) &&
+                code[i] != '+' && code[i] != '*'; i++) ;
+
+                //проверяем значение
+                if (!Value(code, b, i - 1, con))
+                    return false;
+            }
+
+            //добавляем разделители в конце
+            i++;
+            for (; i <= end; i++)
+                if (!char.IsSeparator(code[i]))
+                    return false;
+
             return true;
         }
 
         /// <summary>
-        /// распознавание вектора
+        /// проверка возврата
         /// </summary>
-        /// <param name="s">строка</param>
-        /// <param name="b">индекс первого элемента выражения</param>
-        /// <param name="e">индекс последнего элемента выражения</param>
-        /// <returns>результат анализа</returns>
-        static bool _Vector(string s, int b, int e, out Vector res)
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool Return(string code, int b, int e, StringBuilder con)
         {
-            res = null;
-            //вектор не может быть пустой цепочкой,
-            //первый символ должен быть открывающей скобкой
-            if (b > e || b > s.Length - 1 || s[b] != '(')
-            {
-                Console.WriteLine("На позиции " + (b + 1) + " ожидался символ '('");
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
                 return false;
-            }
 
-            int x, y, z;
-            //от скобки до запятой первое целое число
-            int i = b + 1;
-            try
-            {
-                for (; i < s.Length && i <= e && s[i] != ','; i++) ;
-                x = int.Parse(s.Substring(b + 1, i - 1 - b));
+            //пропускаем пробелы в начале
+            int i = b;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
 
-                //от запятой до запятой второе число
-                i++;
-                b = i;
-                for (; i < s.Length && i <= e && s[i] != ','; i++) ;
-                y = int.Parse(s.Substring(b, i - b));
-
-                //от запятой до скобки последнее число
-                i++;
-                b = i;
-                for (; i < s.Length && i <= e && s[i] != ')'; i++) ;
-                z = int.Parse(s.Substring(b, i - b));
-            }
-            catch
-            {
-                Console.WriteLine("На позиции " + (i + 1) + " ожидалось целое число");
+            //идем до разделителя, проверяем есть ли "return"
+            b = i;
+            for (; i <= e &&
+                !char.IsSeparator(code[i]) && code[i] != '\n'; i++) ;
+            if (code.Substring(b, i - b) != lexemes[10])
                 return false;
-            }
-            //если конец вектора правилен возвращаем истину
-            if (i < s.Length && i == e && s[i] == ')')
-            {
-                res = new Vector(x, y, z);
-                return true;
-            }
-            //иначе сообщаем об ошибке в выражении
-            else
-            {
-                Console.WriteLine("На позиции " + (i + 1) + " ожидался символ ')'");
+            con.Append("11");
+
+            //идем до конца оператора
+            b = i;
+            for (; i <= e && code[i] != lexemes[23][0]; i++) ;
+            //проверяем значение
+            if (!Value(code, b, i - 1, con)) return false;
+            con.Append(", 24");
+
+            i++;
+            for (; i <= end; i++)
+                if (!char.IsSeparator(code[i]))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// проверка вывода
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool Output(string code, int b, int e, StringBuilder con)
+        {
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
                 return false;
-            }
+
+            //пропускаем разделители в начале
+            int i = b;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+            //идем до круглых скобок или разделителя
+            b = i;
+            for (; i <= e && code[i] != lexemes[16][0] &&
+                !char.IsSeparator(code[i]); i++) ;
+
+            //проверяем равенство лексеме
+            if (code.Substring(b, i - b) != lexemes[11])
+                return false;
+            con.Append("12");
+
+            //если был разделитель(...Line     (...
+            //идем до скобок
+            for (; i <= e && code[i] != lexemes[16][0]; i++) ;
+            
+            con.Append(", 17");
+
+            //идем до закрывающизхся скобок
+            b = i + 1;
+            for (i = b; i <= e && code[i] != lexemes[17][0]; i++) ;
+            
+            //проверяем выражение
+            if (!ArithmeticExpression(code, b, i - 1, con))
+                return false;
+
+            //добавляем скобку
+            con.Append(", 18");
+
+            //пропускаем разделители
+            i++;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+            //следующий символ - конец оператора
+            if (code[i] != lexemes[23][0])
+                return false;
+            con.Append(", 24");
+
+            i++;
+            for (; i <= end; i++)
+                if (!char.IsSeparator(code[i]))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// проверка присвоения
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool Assignment(string code, int b, int e, StringBuilder con)
+        {
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
+                return false;
+
+            //пропускаем пробелы в начале
+            int i = b;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+            //ищем границы имени(от начала до знака равно)
+            for (; i <= e && code[i] != lexemes[24][0]; i++) ;
+
+            //свертываем имя
+            if (!NAME(code, b, i - 1, con))
+                return false;
+
+            //добавляем знак равно
+            con.Append(", 25");
+
+            //границы арифметического выражения(от равно до точки с запятой)
+            b = i + 1;
+            for (i = b; i <= e && code[i] != lexemes[23][0]; i++) ;
+            
+            //проверяем и добавляем точку с запятой
+            if (!ArithmeticExpression(code, b, i - 1, con))
+                return false;
+            con.Append(", 24");
+
+            //добавляем разделители в конце
+            i++;
+            for (; i <= end; i++)
+                if (!char.IsSeparator(code[i]))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// проверка имени
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool NAME(string code, int b, int e, StringBuilder con)
+        {
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
+                return false;
+
+            //опускаем пробелы слева и справа
+            for (; b <= e &&
+                char.IsSeparator(code[b]); b++)
+            for (; e > 0 &&
+                char.IsSeparator(code[e]); e--) ;
+
+            //первый знак
+            if (!(code[b] == '_' || (code[b] >= 'a' && code[b] <= 'z') ||
+                (code[b] >= 'A' && code[b] <= 'Z')))
+                return false;
+            b++;
+
+            //следующие символы
+            for (int i = b; i <= e; i++)
+                if (!((code[i] >= 'a' && code[i] <= 'z') ||
+                (code[i] >= 'A' && code[i] <= 'Z') || char.IsDigit(code[i])))
+                    return false;
+
+            //свертка
+            con.Append("1." + code.Substring(b - 1, e - b + 2));
+            for (int i = e + 1; i <= end; i++)
+                if (!char.IsSeparator(code[i]))
+                    return false;
+            return true;
         }
     }
 }
