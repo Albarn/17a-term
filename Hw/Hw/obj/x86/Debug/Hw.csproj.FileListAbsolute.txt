@@ -1,0 +1,4 @@
+E:\repos\17a-term\Hw\Hw\bin\Debug\Hw.exe
+E:\repos\17a-term\Hw\Hw\bin\Debug\Hw.pdb
+E:\repos\17a-term\Hw\Hw\obj\x86\Debug\Hw.exe
+E:\repos\17a-term\Hw\Hw\obj\x86\Debug\Hw.pdb
