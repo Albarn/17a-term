@@ -130,6 +130,81 @@ namespace Hw
             return false;
         }
 
+        static List<string> GetListOfOps(string[] ops)
+        {
+            List<string> lops = new List<string>();
+            for (int k = 0; k < ops.Length; k++)
+            {
+                int count;
+                if (!ops[k].StartsWith(lexemes[8]))//if
+                {
+                    //это обычный оператор, добавляем как есть
+                    lops.Add(ops[k]);
+                }
+                else
+                {
+                    //это оператор если
+                    //добавляем заголовок
+                    lops.Add(ops[k]);
+
+                    k++;
+                    //это блок, добавляем все операторы до закрытия блока
+                    int t = k;
+                    count = -1;
+                    while (t < ops.Length)
+                    {
+                        if (ops[t].StartsWith(lexemes[14]))  //{
+                            count++;
+                        if (ops[t].StartsWith(lexemes[15]))  //}
+                            if (count != 0)
+                                count--;
+                            else
+                                break;
+                        t++;
+                    }
+                    if (t == ops.Length)
+                        throw new InvalidOperationException();
+                    for (; k <= t; k++)   //}
+                        lops[lops.Count - 1] += "\n" + ops[k];
+                    k--;
+
+                    //проверяем, есть ли блок иначе
+                    if (k + 1 < ops.Length && ops[k + 1].StartsWith(lexemes[9])) //else
+                    {
+                        k++;
+                        //делаем то же самое, что и для если
+                        //это оператор иначе
+                        //добавляем заголовок
+                        lops[lops.Count - 1] += "\n" + ops[k];
+
+                        k++;
+                        //это блок, добавляем все операторы до закрытия блока
+                        t = k;
+                        count = -1;
+                        while (t < ops.Length)
+                        {
+                            if (ops[t].StartsWith(lexemes[14]))  //{
+                                count++;
+                            if (ops[t].StartsWith(lexemes[15]))  //}
+                                if (count != 0)
+                                    count--;
+                                else
+                                    break;
+                            t++;
+                        }
+                        if (t == ops.Length)
+                            throw new InvalidOperationException();
+                        for (; k <= t; k++)   //}
+                            lops[lops.Count - 1] += "\n" + ops[k];
+                        k--;
+
+                    }
+                    lops[lops.Count - 1] += "\n";
+                }
+            }
+            return lops;
+        }
+
         /// <summary>
         /// проверка если
         /// </summary>
@@ -186,10 +261,10 @@ namespace Hw
             i++;
             b = i;
             while (i <= e &&
-                code[i]!='\n')
+                code[i] != '\n')
                 i++;
 
-            if (code[i] != '\n')
+            if (i <= e && code[i] != '\n')
                 return false;
             i++;
 
@@ -197,121 +272,71 @@ namespace Hw
             StringBuilder sb = new StringBuilder(con.ToString());
             int j = b;
 
-            //если оператор в блоке если один
-            if (Operator(code, b, i - 2, sb))
-            {
-                con.Clear();
-                con.Append(sb);
-            }
-
-            //иначе проверяем блок
-            else
-            {
-
-                //ищем начало и конец блока
-                if (code[j] != lexemes[14][0])  //{
-                    return false;
-                con.Append("15\n");
-                j++;
-                while (j <= e &&
-                char.IsSeparator(code[j]))
-                    j++;
-
-                if (code[j] != '\n')
-                    return false;
+            //ищем начало и конец блока
+            if (code[j] != lexemes[14][0])  //{
+                return false;
+            con.Append("15\n");
+            j++;
+            while (j <= e &&
+            char.IsSeparator(code[j]))
                 j++;
 
-                int h = j;
+            if (code[j] != '\n')
+                return false;
+            j++;
 
-                j = e;
-                while (j >=h &&
-                    code[j] != lexemes[15][0])  //}
-                    j--;
-                if (code[j] != lexemes[15][0] ||
-                    code[j - 1] != '\n')
-                    return false;
-                j -= 2;
-                
-                //делим блок на операторы, если есть блоки if, 
-                //объединяем их
-                string[] ops = code.Substring(h, j + 1 - h).Split('\n');
-                List<string> lops = new List<string>();
-                for(int k=0;k<ops.Length;k++)
-                {
-                    if(!ops[k].StartsWith(lexemes[8]))//if
-                    {
-                        //это обычный оператор, добавляем как есть
-                        lops.Add(ops[k]);
-                    }
+            int h = j;
+
+            //счетчик внутренних скобок
+            //т.е. если найдена еще одна открывающая скобка
+            //счетчик увеличивается и одна закрывающая скобка
+            //будет пропущена
+            int count = 0;
+            j = h;
+            while (j <= e)  //}
+            {
+                j++;
+                if (code[j] == lexemes[14][0])  //{
+                    count++;
+                if (code[j] == lexemes[15][0])  //}
+                    if (count != 0)
+                        count--;
                     else
-                    {
-                        //это оператор если
-                        //добавляем заголовок
-                        lops.Add(ops[k]);
-
-                        k++;
-                        //проверяем, оператор за ним один или это блок
-                        if (!ops[k].StartsWith(lexemes[14]))    //{
-                        {
-                            //оператор один, добавляем к заголовку
-                            lops[lops.Count - 1] += "\n" + ops[k];
-                        }
-                        else
-                        {
-                            //это блок, добавляем все операторы до закрытия блока
-                            for (; k < ops.Length &&
-                                !ops[k].StartsWith(lexemes[15]); k++)   //}
-                                lops[lops.Count - 1] += "\n" + ops[k];
-                            //закрываем блок
-                            lops[lops.Count - 1] += "\n" + ops[k];
-                        }
-                        //проверяем, есть ли блок иначе
-                        if(ops[k+1].StartsWith(lexemes[9])) //else
-                        {
-                            k++;
-                            //делаем то же самое, что и для если
-                            //это оператор иначе
-                            //добавляем заголовок
-                            lops[lops.Count - 1] += "\n" + ops[k];
-
-                            k++;
-                            //проверяем, оператор за ним один или это блок
-                            if (!ops[k].StartsWith(lexemes[14]))    //{
-                            {
-                                //оператор один, добавляем к заголовку
-                                lops[lops.Count - 1] += "\n" + ops[k];
-                            }
-                            else
-                            {
-                                //это блок, добавляем все операторы до закрытия блока
-                                for (; k < ops.Length &&
-                                    !ops[k].StartsWith(lexemes[15]); k++)   //}
-                                    lops[lops.Count - 1] += "\n" + ops[k];
-                                //закрываем блок
-                                lops[lops.Count - 1] += "\n" + ops[k];
-                            }
-                        }
-                        lops[lops.Count - 1] += "\n";
-                    }
-                }
-                foreach (string op in lops)
-                    if (!Operator(op, 0, op.Length-1, con))
-                        return false;
-
-                con.Append("16\n");
+                        break;
             }
+            if (j > e || code[j] != lexemes[15][0] ||
+                code[j - 1] != '\n')
+                return false;
+            j -= 2;
 
+            //делим блок на операторы, если есть блоки if, 
+            //объединяем их
+            string[] ops = code.Substring(h, j + 1 - h).Split('\n');
+            List<string> lops = new List<string>();
+            try
+            {
+                lops = GetListOfOps(ops);
+            }
+            catch { return false; }
+
+            foreach (string op in lops)
+                if (!Operator(op, 0, op.Length - 1, con))
+                    return false;
+
+            con.Append("16\n");
             i = j + 3;
+
+
 
             while (i <= e &&
                 char.IsSeparator(code[i]))
                 i++;
 
-            if (code[i] != '\n')
+            if (i <= e && code[i] != '\n')
                 return false;
             i++;
 
-            if (i<=e)
+            if (i <= e)
             {
                 if (code.Length < i + 5 || code.Substring(i, 4) != lexemes[9]) //else
                     return false;
@@ -334,50 +359,58 @@ namespace Hw
                 i++;
 
                 sb = new StringBuilder(con.ToString());
-                if (Operator(code, b, i - 2, sb))
-                {
-                    con.Clear();
-                    con.Append(sb);
-                }
-                else
-                {
-                    j = b;
-                    if (code[j] != lexemes[14][0])  //{
-                        return false;
-                    con.Append("15\n");
-                    j++;
-                    while (j <= e &&
-                    char.IsSeparator(code[j]))
-                        j++;
-
-                    if (code[j] != '\n')
-                        return false;
+                j = b;
+                if (code[j] != lexemes[14][0])  //{
+                    return false;
+                con.Append("15\n");
+                j++;
+                while (j <= e &&
+                char.IsSeparator(code[j]))
                     j++;
 
-                    int h = j;
-                    while (j <= e &&
-                        code[j] != lexemes[15][0])  //}
-                        j++;
-                    if (code[j] != lexemes[15][0] &&
-                        code[j - 1] != '\n')
-                        return false;
-                    j -= 2;
+                if (code[j] != '\n')
+                    return false;
+                j++;
 
-                    string[] ops = code.Substring(h, j + 1 - h).Split('\n');
-                    foreach (string op in ops)
-                        if (!Operator(op, 0, op.Length - 1, con))
-                            return false;
-
-                    con.Append("16\n");
+                h = j;
+                count = 0;
+                j = h;
+                while (j <= e)  //}
+                {
+                    j++;
+                    if (code[j] == lexemes[14][0])  //{
+                        count++;
+                    if (code[j] == lexemes[15][0])  //}
+                        if (count != 0)
+                            count--;
+                        else
+                            break;
                 }
+                if (j > e || code[j] != lexemes[15][0] ||
+                    code[j - 1] != '\n')
+                    return false;
+                j -= 2;
+
+                ops = code.Substring(h, j + 1 - h).Split('\n');
+                try
+                {
+                    lops = GetListOfOps(ops);
+                }
+                catch { return false; }
+                foreach (string op in lops)
+                    if (!Operator(op, 0, op.Length - 1, con))
+                        return false;
+
+                con.Append("16\n");
+
+                i = j + 3;
             }
 
-            i = j + 3;
             //добавляем разделители в конце
-            i++;
-            for (; i <= end; i++)
-                if (!char.IsSeparator(code[i]))
-                    return false;
+            //i++;
+            //for (; i <= end; i++)
+            //    if (!char.IsSeparator(code[i]) && code[i] != '\n')
+            //        return false;
 
             return true;
         }
