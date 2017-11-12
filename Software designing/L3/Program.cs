@@ -183,7 +183,8 @@ namespace L4
             //натуральное число не может быть пустой цепочкой
             if (b > e)
             {
-                Console.WriteLine("На позиции " + (b + 1) + " ожидалась цифра от 1 до 9");
+                b = b + 1;
+                Console.WriteLine("На позиции " + b + " ожидалась цифра от 1 до 9");
                 return false;
             }
             //первый знак не должен быть нулем
@@ -194,7 +195,8 @@ namespace L4
             }
             else
             {
-                Console.WriteLine("На позиции " + (b + 1) + " ожидалась цифра от 1 до 9");
+                b = b + 1;
+                Console.WriteLine("На позиции " + b + " ожидалась цифра от 1 до 9");
                 return false;
             }
         }
@@ -211,18 +213,22 @@ namespace L4
             //если предыдущая цифра была последней
             //возвращаем истину
             if (b > e)
-                return true;
-
-            //следующий знак должен быть цифрой
-            else if (s[b] >= '0' && s[b] <= '9')
             {
-                res = res * 10 + int.Parse(s[b].ToString());
-                return D(s, b + 1, e, ref res);
+                return true;
             }
+            //следующий знак должен быть цифрой
             else
             {
-                Console.WriteLine("На позиции " + (b + 1) + " ожидалась цифра от 0 до 9");
-                return false;
+                if (s[b] >= '0' && s[b] <= '9')
+                {
+                    res = res * 10 + int.Parse(s[b].ToString());
+                    return D(s, b + 1, e, ref res);
+                }
+                else
+                {
+                    Console.WriteLine("На позиции " + (b + 1) + " ожидалась цифра от 0 до 9");
+                    return false;
+                }
             }
         }
     }

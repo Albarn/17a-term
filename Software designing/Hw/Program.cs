@@ -40,31 +40,34 @@ namespace Hw
             ">=",
             "<=",
             "+",
-            "*"
+            "*",
+            "СИМВОЛ",
+            "'",
+            "'"
         };
 
         /*
-        static bool D(string s, int b, int e, ref int res)
-        {
-            //если предыдущая цифра была последней
-            //возвращаем истину
-            if (b > e)
-                return true;
-
-            //следующий знак должен быть цифрой
-            else 
-            if (s[b] >= '0' && s[b] <= '9')
-            {
-                res = res * 10 + int.Parse(s[b].ToString());
-                return D(s, b + 1, e, ref res);
-            }
-            else
-            {
-                Console.WriteLine("На позиции " + (b + 1) + " ожидалась цифра от 0 до 9");
-                return false;
-            }
-        }
-        }*/
+static bool D(string s, int b, int e, ref int res)
+{
+if (b > e)
+{
+return true;
+}
+else
+{
+if (s[b] >= '0' && s[b] <= '9')
+{
+res = res * 10 + int.Parse(s[b].ToString());
+return D(s, b + 1, e, ref res);
+}
+else
+{
+Console.WriteLine("На позиции " + (b + 1) + " ожидалась цифра от 0 до 9");
+return false;
+}
+}
+}
+        */
 
         static void Main()
         {
@@ -79,13 +82,280 @@ namespace Hw
             }
 
             StringBuilder con = new StringBuilder();
-            bool b = If(code, 0, code.Length - 1, con);
+            bool b = Call(code, 0, code.Length - 1, con);
             Console.WriteLine(b);
             if (b)
                 Console.WriteLine(con);
 
             //выход по нажатию кнопки
             Console.Read();
+        }
+
+        /// <summary>
+        /// проверка текста подпрограммы
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="sb">строка для свертки</param>
+        /// <returns></returns>
+        static bool Text(string code, int b, int e, StringBuilder con)
+        {
+            string[] ops1 = code.Split('\n');
+            if (!Signature(ops1[0], 0, ops1[0].Length - 1, con))
+                return false;
+            if (ops1[1] == lexemes[14])
+            {
+                con.Append("\n15\n");
+            }
+            else
+                return false;
+            string[] ops = new string[ops1.Length - 3];
+            for (int i = 2; i < ops1.Length - 1; i++)
+                ops[i - 2] = ops1[i];
+
+            List<string> lops = GetListOfOps(ops);
+            foreach(string lop in lops)
+            {
+                if (!Operator(lop, 0, lop.Length - 1, con))
+                    return false;
+                con.Append("\n");
+            }
+
+            if (ops1[ops1.Length-1] == lexemes[15])
+            {
+                con.Append("16");
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// проверка сигнатуры
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool Signature(string code, int b, int e, StringBuilder con)
+        {
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
+                return false;
+
+            //пропускаем пробелы в начале
+            int i = b;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+            b = i;
+            while (i <= e &&
+                !char.IsSeparator(code[i]))
+                i++;
+
+            if (code.Substring(b, i - b) == lexemes[6]) //static
+            {
+                con.Append("7, ");
+
+                while (i <= e &&
+                    char.IsSeparator(code[i]))
+                    i++;
+
+                b = i;
+                while (i <= e &&
+                    !char.IsSeparator(code[i]))
+                    i++;
+            }
+
+            if (!Type(code, b, i - 1, con))
+                return false;
+
+            con.Append(", ");
+            while (i <= e &&
+                    char.IsSeparator(code[i]))
+                i++;
+
+            b = i;
+            while (i <= e &&
+                !char.IsSeparator(code[i])&&
+                code[i]!=lexemes[16][0])
+                i++;
+
+            if (!NAME(code, b, i - 1, con))
+                return false;
+
+            while (i <= e &&
+                    char.IsSeparator(code[i]))
+                i++;
+
+            b = i;
+            if (code[b] == lexemes[16][0])    //(
+                con.Append(", 17, ");
+            else
+                return false;
+
+            i++;
+            while (i <= e &&
+                char.IsSeparator(code[i]))
+                i++;
+            if(code[i]==lexemes[17][0])
+            {
+                con.Append("18");
+            }
+            else
+            {
+                b = i;
+                while (i <= e &&
+                code[i]!=lexemes[25][0]&&
+                code[i]!=lexemes[17][0])
+                    i++;
+                if (!Variable(code, b, i - 1, con))
+                    return false;
+
+                int c = 0;
+                while (i <= e)
+                {
+                    c++;
+                    if (c > 10000)
+                        break;
+                    while (i <= e &&
+                    char.IsSeparator(code[i]))
+                        i++;
+
+                    if(code[i]==lexemes[17][0])
+                    {
+                        con.Append(", 18");
+                        break;
+                    }
+                    b = i;
+                    while (i <= e &&
+                    !char.IsSeparator(code[i]))
+                        i++;
+                    if (i - b == 1 && code[b] == lexemes[25][0])    //,
+                        con.Append(", 26, ");
+                    else
+                        return false;
+
+                    while (i <= e &&
+                    char.IsSeparator(code[i]))
+                        i++;
+
+                    b = i;
+                    while (i <= e &&
+                        code[i] != lexemes[25][0] &&
+                        code[i] != lexemes[17][0])
+                        i++;
+
+                    if (!Variable(code, b, i - 1, con))
+                        return false;
+                }
+            }
+
+            //добавляем разделители в конце
+            i++;
+            for (; i <= end; i++)
+                if (!char.IsSeparator(code[i]))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// проверка типа
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool Type(string code, int b, int e, StringBuilder con)
+        {
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
+                return false;
+
+            //пропускаем пробелы в начале
+            int i = b;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+            b = i;
+            while (i <= e &&
+                !char.IsSeparator(code[i]))
+                i++;
+
+            string type = code.Substring(b, i - b);
+            if (type == lexemes[3])
+                con.Append("4");
+            else if (type == lexemes[4])
+                con.Append("5");
+            else if (type == lexemes[5])
+                con.Append("6");
+            else
+                return false;
+            
+            //добавляем разделители в конце
+            i++;
+            for (; i <= end; i++)
+                if (!char.IsSeparator(code[i]))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// проверка переменной
+        /// </summary>
+        /// <param name="code">код</param>
+        /// <param name="b">начало</param>
+        /// <param name="e">конец</param>
+        /// <param name="con">строка для свертки</param>
+        /// <returns></returns>
+        static bool Variable(string code, int b, int e, StringBuilder con)
+        {
+            int end = e;
+            //проверка параметров
+            if (e >= code.Length || b >= code.Length || b > e)
+                return false;
+
+            //пропускаем пробелы в начале
+            int i = b;
+            for (; i <= e &&
+                char.IsSeparator(code[i]); i++) ;
+
+            b = i;
+
+            while (i <= e &&
+                !char.IsSeparator(code[i]))
+                i++;
+
+            //если есть ref свертываем и опускаем его
+            if (i - b == 3 && code.Substring(b, 3) == lexemes[7])
+            {
+                con.Append("8, ");
+                while (i <= e &&
+                char.IsSeparator(code[i]))
+                    i++;
+
+                b = i;
+                while (i <= e &&
+                !char.IsSeparator(code[i]))
+                    i++;
+            }
+            //проверяем тип
+            if (!Type(code, b, i - 1, con))
+                return false;
+
+            con.Append(", ");
+            //проверяем остаток на ИМЯ
+            if (!NAME(code, i, e, con))
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -256,7 +526,7 @@ namespace Hw
                 char.IsSeparator(code[i]))
                 i++;
 
-            if (code[i] != '\n')
+            if (i>e||code[i] != '\n')
                 return false;
             i++;
             b = i;
@@ -584,7 +854,27 @@ namespace Hw
             }
             catch { }
 
-
+            //проверка 'СИМВОЛ'
+            h = b;
+            j = e;
+            try
+            {
+                while (h <= e &&
+                    char.IsSeparator(code[h]))
+                    h++;
+                while (j >= h &&
+                    char.IsSeparator(code[j]))
+                    j--;
+                if (j - h == 2 && code[h] == lexemes[33][0] &&
+                    code[j] == lexemes[34][0])
+                {
+                    sb.Append("34, 33." + code[h + 1] + ", 35");
+                    con.Clear();
+                    con.Append(sb);
+                    return true;
+                }
+            }
+            catch { }
 
             //проверка true | false
             sb.Clear();
@@ -622,7 +912,7 @@ namespace Hw
                 return true;
             }
 
-            //проверка ИМЯ “[” ЦЕЛОЕ “]”
+            //проверка ИМЯ “[” ЗНАЧЕНИЕ “]”
             sb.Clear();
             sb.Append(con.ToString());
             h = b;
@@ -649,9 +939,8 @@ namespace Hw
                         while (j >= h &&
                             char.IsSeparator(code[j]))
                             j--;
-                        int a = int.Parse(code.Substring(h, j + 1 - h));
-                        sb.Append("3." + a);
-                        sb.Append(", 20");
+                        if (!Value(code, h, j, sb))
+                            return false;
                         con.Clear();
                         con.Append(sb);
                         return true;
@@ -716,12 +1005,12 @@ namespace Hw
                 //между ИМЯ.ИМЯ не должно быть пробелов
                 if (char.IsSeparator(code[i]))
                     single = true;
-
+            
             //если указано имя класса
             if (!single)
             {
                 //имя класса
-                if (!NAME(code, b, i - 1, con))
+                if (!Value(code, b, i - 1, con))
                     return false;
 
                 //добавляем точку и идем до открывающееся скобки
@@ -738,6 +1027,7 @@ namespace Hw
             //имя метода
             if (!NAME(code, b, i - 1, con))
                 return false;
+            
 
             while (char.IsSeparator(code[i]))
                 i++;
@@ -803,10 +1093,10 @@ namespace Hw
             con.Append(", 18");
             i++;
 
-            //добавляем разделители в конце
-            for (; i <= end; i++)
-                if (!char.IsSeparator(code[i]))
-                    return false;
+            ////добавляем разделители в конце
+            //for (; i <= end; i++)
+            //    if (!char.IsSeparator(code[i]))
+            //        return false;
 
             return true;
         }
@@ -903,7 +1193,7 @@ namespace Hw
                 return false;
 
             //проверяем остальную часть выражения
-            while (i <= e)
+            while (i < e)
             {
                 //опускаем пробелы
                 for (; i <= e &&
@@ -929,6 +1219,7 @@ namespace Hw
                 !char.IsSeparator(code[i]) &&
                 code[i] != '+' && code[i] != '*'; i++) ;
 
+                //if (i > e) i = e;
                 //проверяем значение
                 if (!Value(code, b, i - 1, con))
                     return false;
@@ -1079,7 +1370,7 @@ namespace Hw
                 return false;
 
             //добавляем знак равно
-            con.Append(", 25");
+            con.Append(", 25, ");
 
             //границы арифметического выражения(от равно до точки с запятой)
             b = i + 1;
