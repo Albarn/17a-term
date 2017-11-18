@@ -62,7 +62,8 @@ return D(s, b + 1, e, ref res);
 }
 else
 {
-Console.WriteLine("На позиции " + (b + 1) + " ожидалась цифра от 0 до 9");
+b = b + 1;
+Console.WriteLine("На позиции " + b + " ожидалась цифра от 0 до 9");
 return false;
 }
 }
@@ -82,7 +83,7 @@ return false;
             }
 
             StringBuilder con = new StringBuilder();
-            bool b = Call(code, 0, code.Length - 1, con);
+            bool b = Text(code, 0, code.Length - 1, con);
             Console.WriteLine(b);
             if (b)
                 Console.WriteLine(con);
@@ -386,9 +387,10 @@ return false;
                 return true;
             }
             sb.Clear();
-            if (Output(code, b, e, sb))
+            if (code[e] == lexemes[23][0] && Call(code, b, e - 1, sb))
             {
                 con.Append(sb);
+                con.Append(", 24");
                 return true;
             }
             sb.Clear();
@@ -590,8 +592,11 @@ return false;
             catch { return false; }
 
             foreach (string op in lops)
+            {
                 if (!Operator(op, 0, op.Length - 1, con))
                     return false;
+                con.AppendLine();
+            }
 
             con.Append("16\n");
             i = j + 3;
@@ -668,10 +673,13 @@ return false;
                 }
                 catch { return false; }
                 foreach (string op in lops)
+                {
                     if (!Operator(op, 0, op.Length - 1, con))
                         return false;
+                    con.AppendLine();
+                }
 
-                con.Append("16\n");
+                con.Append("16");
 
                 i = j + 3;
             }
@@ -1005,7 +1013,9 @@ return false;
                 //между ИМЯ.ИМЯ не должно быть пробелов
                 if (char.IsSeparator(code[i]))
                     single = true;
-            
+
+            if (code[i] == lexemes[16][0])
+                single = true;
             //если указано имя класса
             if (!single)
             {
@@ -1039,8 +1049,15 @@ return false;
 
             i++;
             b = i;
-            while (char.IsSeparator(code[i]))
-                i++;
+            //int count = 0;
+            //while (i<=e)
+            //{
+            //    if(code[i])
+            //    if (code[i] == lexemes[16][0]) //(
+            //        count++;
+            //    i++;
+            //}
+            //i--;
 
             //если в скобках есть параметры
             if (code[i] != lexemes[17][0])  //)
@@ -1048,18 +1065,27 @@ return false;
 
                 con.Append(", ");
                 //добавляем первый
+                int count = 0;
                 while (code[i] != lexemes[25][0] && //,
-                    code[i] != lexemes[17][0])      //)
+                    (code[i] != lexemes[17][0] || count != 0))      //)
+                {
+                    if (code[i] == lexemes[16][0])
+                        count++;
+                    if (code[i] == lexemes[17][0])
+                        count--;
                     i++;
+                }
                 if (!Parametr(code, b, i - 1, con))
                     return false;
 
+                bool ca = code[i] != lexemes[17][0];
                 if (code[i] == lexemes[25][0])      //,
                     con.Append(", 26");
 
+                i++;
                 //добавляем остальные
                 int c = 0;
-                while (true)
+                while (ca)
                 {
                     con.Append(", ");
                     c++;
@@ -1069,14 +1095,18 @@ return false;
                         i++;
                     if (code[i] == lexemes[17][0])  //)
                         break;
-                    else if (code[i] != lexemes[25][0])
-                        return false;
+                    
 
-                    i++;
                     b = i;
-                    while (code[i] != lexemes[17][0] && //)
-                        code[i] != lexemes[25][0])      //,
+                    while (code[i] != lexemes[25][0] && //,
+                    (code[i] != lexemes[17][0] || count != 0))      //)
+                    {
+                        if (code[i] == lexemes[16][0])
+                            count++;
+                        if (code[i] == lexemes[17][0])
+                            count--;
                         i++;
+                    }
 
                     if (!Parametr(code, b, i - 1, con))
                         return false;
@@ -1183,15 +1213,14 @@ return false;
             for (; i <= e &&
                 char.IsSeparator(code[i]); i++) ;
 
-            //идем до разделителя/оператора, проверяем есть ли значение
+            //идем до оператора, проверяем есть ли значение
 
-            for (; i <= e &&
-                !char.IsSeparator(code[i]) &&
+            for (; i <= e  &&
                 code[i] != '+' && code[i] != '*'; i++) ;
 
             if (!Value(code, b, i - 1, con))
                 return false;
-
+            
             //проверяем остальную часть выражения
             while (i < e)
             {
@@ -1216,7 +1245,6 @@ return false;
                 //ищем пределы значения
                 b = i;
                 for (; i <= e &&
-                !char.IsSeparator(code[i]) &&
                 code[i] != '+' && code[i] != '*'; i++) ;
 
                 //if (i > e) i = e;
@@ -1267,7 +1295,7 @@ return false;
             for (; i <= e && code[i] != lexemes[23][0]; i++) ;
             //проверяем значение
             if (!Value(code, b, i - 1, con)) return false;
-            con.Append(", 24\n");
+            con.Append(", 24");
 
             i++;
             for (; i <= end; i++)
