@@ -7,40 +7,40 @@ namespace Class_Library
     /// <summary>
     /// разряженная матрица
     /// </summary>
-    public class Matrix:IEnumerable<Cell>
+    public class SparseMatrixOfRealNumbers:IEnumerable<NodeOfSparseMatrix>
     {
         /// <summary>
         /// список узлов
         /// </summary>
-        List<Cell> cells;
+        List<NodeOfSparseMatrix> cells;
 
-        bool changed = false;
-        int pow = 0;
-        public int Size
+        bool powerChanged = false;
+        int power = 0;
+        public int Power
         {
             get
             {
-                if (changed)
+                if (powerChanged)
                 {
                     //вычисляем ранг матрицы
-                    pow = 0;
-                    foreach (Cell c in this)
+                    power = 0;
+                    foreach (NodeOfSparseMatrix c in this)
                     {
-                        if (c.Row > pow) pow = c.Row;
-                        if (c.Col > pow) pow = c.Col;
+                        if (c.Row > power) power = c.Row;
+                        if (c.Col > power) power = c.Col;
                     }
-                    changed = false;
+                    powerChanged = false;
                 }
-                return pow;
+                return power;
             }
         }
 
         /// <summary>
         /// создание пустой матрицы
         /// </summary>
-        public Matrix()
+        public SparseMatrixOfRealNumbers()
         {
-            cells = new List<Cell>();
+            cells = new List<NodeOfSparseMatrix>();
         }
 
         /// <summary>
@@ -48,10 +48,10 @@ namespace Class_Library
         /// </summary>
         /// <param name="size">ранг</param>
         /// <param name="density">плотность(от 0 до 1)</param>
-        public Matrix(int size, float density)
+        public SparseMatrixOfRealNumbers(int size, float density)
         {
             Random f = new Random(DateTime.Now.Millisecond);
-            cells = new List<Cell>();
+            cells = new List<NodeOfSparseMatrix>();
 
             //заполняем главную диагональ
             for (int i = 1; i <= size; i++)
@@ -72,14 +72,14 @@ namespace Class_Library
         }
 
         //методы поддержки перечисления коллекции cells
-        public IEnumerator<Cell> GetEnumerator()
+        public IEnumerator<NodeOfSparseMatrix> GetEnumerator()
         {
-            return ((IEnumerable<Cell>)cells).GetEnumerator();
+            return ((IEnumerable<NodeOfSparseMatrix>)cells).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<Cell>)cells).GetEnumerator();
+            return ((IEnumerable<NodeOfSparseMatrix>)cells).GetEnumerator();
         }
 
         /// <summary>
@@ -88,14 +88,14 @@ namespace Class_Library
         /// <param name="row">строка</param>
         /// <param name="col">столбец</param>
         /// <param name="t">параметр для перегрузки</param>
-        Cell this[int row, int col, int t]
+        NodeOfSparseMatrix this[int row, int col, int t]
         {
             get {
-                foreach (Cell cell in cells)
+                foreach (NodeOfSparseMatrix cell in cells)
                     //перебираем до совпадения и возвращаем поле val
                     if (cell.Row == row)
                     {
-                        Cell c = cell;
+                        NodeOfSparseMatrix c = cell;
                         do
                         {
                             if (c.Col == col)
@@ -106,7 +106,7 @@ namespace Class_Library
                     }
                 else if (cell.Col == col)
                     {
-                        Cell c = cell;
+                        NodeOfSparseMatrix c = cell;
                         do
                         {
                             if (c.Row == row)
@@ -128,7 +128,7 @@ namespace Class_Library
         {
             get
             {
-                Cell res = this[row, col, 0];
+                NodeOfSparseMatrix res = this[row, col, 0];
 
                 if (res != null) return res.val;
                 else
@@ -136,16 +136,16 @@ namespace Class_Library
                     return 0;
             }
             set {
-                Cell c = this[row, col, 0];
+                NodeOfSparseMatrix c = this[row, col, 0];
                 if (c == null)
                 {
                     //если такого узла нет, его нужно вставить
-                    Insert(row, col, value);
+                    InsertNode(row, col, value);
                 }
                 else
                 {
                     c.val = value;
-                    if (c.val == 0) Remove(c.Row, c.Col);
+                    if (c.val == 0) RemoveNode(c.Row, c.Col);
                 }
             }
         }
@@ -156,16 +156,16 @@ namespace Class_Library
         /// <param name="i">строка</param>
         /// <param name="j">столбец</param>
         /// <param name="v">значение</param>
-        void Insert(int i, int j, double v)
+        void InsertNode(int i, int j, double v)
         {
 
             //создаем ячейку и проверяем на ноль
-            Cell cell = new Cell(i, j, v);
+            NodeOfSparseMatrix cell = new NodeOfSparseMatrix(i, j, v);
             if (cell.val == 0) return;
 
             //если узел в этом месте уже есть,
             //операция неверна
-            foreach (Cell c in this)
+            foreach (NodeOfSparseMatrix c in this)
                 if (c.Col == cell.Col && c.Row == cell.Row)
                     return;
 
@@ -173,7 +173,7 @@ namespace Class_Library
             if (cells.Count > 0)
             {
                 //ищем соседнюю ячейку
-                foreach (Cell c in this)
+                foreach (NodeOfSparseMatrix c in this)
 
                     //если узел на той же строке и между текущей ячейкой
                     //и следующей добавляем ссылки
@@ -228,7 +228,7 @@ namespace Class_Library
 
             //и наконец добавляем узел в список ячеек матрицы
             cells.Add(cell);
-            changed = true;
+            powerChanged = true;
         }
 
         /// <summary>
@@ -236,10 +236,10 @@ namespace Class_Library
         /// </summary>
         /// <param name="i">строка</param>
         /// <param name="j">столбец</param>
-        void Remove(int i, int j)
+        void RemoveNode(int i, int j)
         {
-            Cell cell = this[i, j, 0];
-            foreach (Cell c in this)
+            NodeOfSparseMatrix cell = this[i, j, 0];
+            foreach (NodeOfSparseMatrix c in this)
             {
                 //делаем обход удалемой ячейки
                 if (c.Up == cell)
@@ -250,7 +250,7 @@ namespace Class_Library
 
             //и удаляем узел из списка ячеек
             cells.Remove(cell);
-            changed = true;
+            powerChanged = true;
         }
 
         /// <summary>
@@ -258,19 +258,19 @@ namespace Class_Library
         /// </summary>
         /// <param name="i"></param>
         /// <param name="j"></param>
-        public bool MakeStep(int i, int j)
+        public bool MakeAxialStep(int i, int j)
         {
             //Шаг 1.[Начальная установка]
             //получаем ячейку и проверяем на равенство нулю
-            Cell centre = this[i, j, 0];
+            NodeOfSparseMatrix centre = this[i, j, 0];
             if (centre.val == 0) return false;
 
             //Шаг 2.[Найти новый столбец]
             //начинаем обработку узлов, что не принадлежат
             //осевой строке/столбцу
             //сдвигаемся от осевого элемента
-            Cell hor = centre.Left;
-            Cell ver;
+            NodeOfSparseMatrix hor = centre.Left;
+            NodeOfSparseMatrix ver;
 
             //и ведем цикл пока на него не наткнемся
             while (hor != centre)
@@ -297,14 +297,14 @@ namespace Class_Library
                     //Шаг 4.[Осевая операция]
                     //если элемента не было, добавляем
                     //если обнулился, убираем
-                    Cell cell = this[row, col,0];
+                    NodeOfSparseMatrix cell = this[row, col,0];
                     if (cell == null)
-                        Insert(row, col, -((ver.val * hor.val) / centre.val));
+                        InsertNode(row, col, -((ver.val * hor.val) / centre.val));
                     else
                     {
                         cell.val -= (ver.val * hor.val) / centre.val;
                         if (cell.val == 0)
-                            Remove(row, col);
+                            RemoveNode(row, col);
                     }
 
                     ver = ver.Up;
@@ -348,11 +348,11 @@ namespace Class_Library
         /// <summary>
         /// обращение матрицы
         /// </summary>
-        public bool Invert()
+        public bool InvertMatrix()
         {
             //вычисляем ранг матрицы
             int pow = 0;
-            foreach (Cell c in this)
+            foreach (NodeOfSparseMatrix c in this)
             {
                 if (c.Row > pow) pow = c.Row;
                 if (c.Col > pow) pow = c.Col;
@@ -366,7 +366,7 @@ namespace Class_Library
             //для элементов главной диагонали вызываем
             //метод ОЖИ
             for (int i = 1; i <= pow; i++)
-                if (!MakeStep(i, i))
+                if (!MakeAxialStep(i, i))
                     return false;
             return true;
         }
@@ -377,20 +377,20 @@ namespace Class_Library
         /// <param name="op1">левый операнд</param>
         /// <param name="op2">правый операнд</param>
         /// <returns></returns>
-        static public Matrix MultiplyMatrixes(Matrix op1, Matrix op2)
+        static public SparseMatrixOfRealNumbers MultiplyMatrixes(SparseMatrixOfRealNumbers op1, SparseMatrixOfRealNumbers op2)
         {
             //правая часть выражения
-            Matrix res = new Matrix();
+            SparseMatrixOfRealNumbers res = new SparseMatrixOfRealNumbers();
 
             //размеры матриц
             int r1, r2, c1, c2;
             r1 = r2 = c1 = c2 = 0;
-            foreach (Cell c in op1)
+            foreach (NodeOfSparseMatrix c in op1)
             {
                 if (c.Row > r1) r1 = c.Row;
                 if (c.Col > c1) c1 = c.Col;
             }
-            foreach (Cell c in op2)
+            foreach (NodeOfSparseMatrix c in op2)
             {
                 if (c.Row > r2) r2 = c.Row;
                 if (c.Col > c2) c2 = c.Col;
@@ -410,10 +410,10 @@ namespace Class_Library
         /// <summary>
         /// копирование матрицы
         /// </summary>
-        public Matrix Copy()
+        public SparseMatrixOfRealNumbers CopyMatrix()
         {
-            Matrix res = new Matrix();
-            foreach (Cell cell in cells)
+            SparseMatrixOfRealNumbers res = new SparseMatrixOfRealNumbers();
+            foreach (NodeOfSparseMatrix cell in cells)
                 res[cell.Row, cell.Col] = cell.val;
             return res;
         }

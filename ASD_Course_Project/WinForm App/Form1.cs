@@ -7,8 +7,8 @@ namespace WinForm_App
     public partial class Form1 : Form
     {
         //левая и правая часть системы
-        Matrix B = new Matrix();
-        Matrix A = new Matrix();
+        SparseMatrixOfRealNumbers B = new SparseMatrixOfRealNumbers();
+        SparseMatrixOfRealNumbers A = new SparseMatrixOfRealNumbers();
 
         //генерируется ли таблица в данный момент
         bool gen = false;
@@ -51,8 +51,8 @@ namespace WinForm_App
             dataGridView1.Columns[dataGridView1.Columns.Count - 1].Width = 50;
 
             //объявление матриц
-            B = new Matrix();
-            A = new Matrix();
+            B = new SparseMatrixOfRealNumbers();
+            A = new SparseMatrixOfRealNumbers();
         }
 
         //запись изменений из таблицы в матрицу
@@ -86,14 +86,14 @@ namespace WinForm_App
 
             //создаем матрицу и записываем ее в таблицу
             int size = (int)sizeNumericUpDown.Value;
-            B = new Matrix(size, (float)trackBar1.Value / 20);
+            B = new SparseMatrixOfRealNumbers(size, (float)trackBar1.Value / 20);
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
                     dataGridView1[j, i].Value = B[i + 1, j + 1].ToString("F2");
 
             //тоже самое для правой части,
             //только генерируем вручную
-            A = new Matrix();
+            A = new SparseMatrixOfRealNumbers();
             int count = (int)(size * (float)trackBar1.Value / 20);
             Random f = new Random(DateTime.Now.Millisecond);
             while (count > 0)
@@ -111,8 +111,8 @@ namespace WinForm_App
         private void resolveButton_Click(object sender, EventArgs e)
         {
             //метод обращения изменяет матрицу, поэтому копируем исходную
-            Matrix V = B.Copy();
-            if (!V.Invert() || B.Size != (int)sizeNumericUpDown.Value)
+            SparseMatrixOfRealNumbers V = B.CopyMatrix();
+            if (!V.InvertMatrix() || B.Power != (int)sizeNumericUpDown.Value)
             {
                 MessageBox.Show("главная диагональ содержит нули,\n" +
                     "обратную матрицу вычислить нельзя");
@@ -123,10 +123,10 @@ namespace WinForm_App
 
             //получаем решение перемножением обращенной матрицы
             //на правую часть
-            Matrix X = Matrix.MultiplyMatrixes(V, A);
+            SparseMatrixOfRealNumbers X = SparseMatrixOfRealNumbers.MultiplyMatrixes(V, A);
 
             //запись решения в вектор справа
-            for (int i = 0; i < B.Size; i++)
+            for (int i = 0; i < B.Power; i++)
                 dataGridView2.Rows[i].Cells[0].Value =
                     X[i + 1, 1].ToString("F2");
         }
