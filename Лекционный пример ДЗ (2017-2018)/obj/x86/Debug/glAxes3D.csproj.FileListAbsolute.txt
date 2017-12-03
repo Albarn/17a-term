@@ -1,0 +1,18 @@
+E:\Work\glAxes3D\bin\Debug\OpenGL WinForm Application.exe
+E:\Work\glAxes3D\bin\Debug\OpenGL WinForm Application.pdb
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.csprojResolveAssemblyReference.cache
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.Properties.Resources.resources
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.csproj.GenerateResource.Cache
+E:\Work\glAxes3D\obj\x86\Debug\OpenGL WinForm Application.exe
+E:\Work\glAxes3D\obj\x86\Debug\OpenGL WinForm Application.pdb
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.MainForm.resources
+E:\Work\glAxes3D\obj\x86\Debug\glAxes3D.RenderControl.resources
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\obj\x86\Debug\OpenGL WinForm Application.exe
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\obj\x86\Debug\OpenGL WinForm Application.pdb
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\bin\Debug\OpenGL WinForm Application.exe
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\bin\Debug\OpenGL WinForm Application.pdb
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\obj\x86\Debug\glAxes3D.csprojResolveAssemblyReference.cache
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\obj\x86\Debug\glAxes3D.MainForm.resources
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\obj\x86\Debug\glAxes3D.Properties.Resources.resources
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\obj\x86\Debug\glAxes3D.RenderControl.resources
+F:\repos\17a-term\Лекционный пример ДЗ (2017-2018)\obj\x86\Debug\glAxes3D.csproj.GenerateResource.Cache

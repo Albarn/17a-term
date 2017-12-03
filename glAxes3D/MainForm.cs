@@ -1,37 +1,23 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace glAxes3D
 {
     public partial class MainForm : Form
     {
+
+        //нужно ли прятать курсор
+        //*в полноэкранном режиме нужно
+        public bool cursorHide = true;
         public MainForm()
         {
             InitializeComponent();
         }
 
-        //изменение параметров плоскости и перерисовка элемента
-        private void aTextBox_TextChanged(object sender, System.EventArgs e)
+        private void MainForm_Shown(object sender, System.EventArgs e)
         {
-            double.TryParse(aTextBox.Text, out renderControl1.a);
-            renderControl1.Invalidate();
-        }
-
-        private void bTextBox_TextChanged(object sender, System.EventArgs e)
-        {
-            double.TryParse(bTextBox.Text, out renderControl1.b);
-            renderControl1.Invalidate();
-        }
-
-        private void cTextBox_TextChanged(object sender, System.EventArgs e)
-        {
-            double.TryParse(cTextBox.Text, out renderControl1.c);
-            renderControl1.Invalidate();
-        }
-
-        private void dTextBox_TextChanged(object sender, System.EventArgs e)
-        {
-            double.TryParse(dTextBox.Text, out renderControl1.d);
-            renderControl1.Invalidate();
+            if (cursorHide)
+                Cursor.Hide();
         }
     }
 }
