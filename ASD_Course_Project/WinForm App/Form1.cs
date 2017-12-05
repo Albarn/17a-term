@@ -7,8 +7,8 @@ namespace WinForm_App
     public partial class Form1 : Form
     {
         //левая и правая часть системы
-        SparseMatrixOfRealNumbers B = new SparseMatrixOfRealNumbers();
-        SparseMatrixOfRealNumbers A = new SparseMatrixOfRealNumbers();
+        SparseMatrix B = new SparseMatrix();
+        SparseMatrix A = new SparseMatrix();
 
         //генерируется ли таблица в данный момент
         bool gen = false;
@@ -51,8 +51,8 @@ namespace WinForm_App
             dataGridView1.Columns[dataGridView1.Columns.Count - 1].Width = 50;
 
             //объявление матриц
-            B = new SparseMatrixOfRealNumbers();
-            A = new SparseMatrixOfRealNumbers();
+            B = new SparseMatrix();
+            A = new SparseMatrix();
         }
 
         //запись изменений из таблицы в матрицу
@@ -86,14 +86,18 @@ namespace WinForm_App
 
             //создаем матрицу и записываем ее в таблицу
             int size = (int)sizeNumericUpDown.Value;
-            B = new SparseMatrixOfRealNumbers(size, (float)trackBar1.Value / 20);
+            B = new SparseMatrix(size, (float)trackBar1.Value / 20);
             for (int i = 0; i < size; i++)
                 for (int j = 0; j < size; j++)
+#if DEBUG
+                    dataGridView1[j, i].Value = B[i + 1, j + 1].ToString();
+#else
                     dataGridView1[j, i].Value = B[i + 1, j + 1].ToString("F2");
+#endif
 
             //тоже самое для правой части,
             //только генерируем вручную
-            A = new SparseMatrixOfRealNumbers();
+            A = new SparseMatrix();
             int count = (int)(size * (float)trackBar1.Value / 20);
             Random f = new Random(DateTime.Now.Millisecond);
             while (count > 0)
@@ -103,7 +107,11 @@ namespace WinForm_App
             }
             for (int i = 0; i < size; i++)
                 dataGridView1[dataGridView1.Columns.Count - 1, i].Value =
+#if DEBUG
+                    A[i + 1, 1].ToString();
+#else
                     A[i + 1, 1].ToString("F2");
+#endif
             gen = false;
         }
 
@@ -111,7 +119,7 @@ namespace WinForm_App
         private void resolveButton_Click(object sender, EventArgs e)
         {
             //метод обращения изменяет матрицу, поэтому копируем исходную
-            SparseMatrixOfRealNumbers V = B.CopyMatrix();
+            SparseMatrix V = B.CopyMatrix();
             if (!V.InvertMatrix() || B.Power != (int)sizeNumericUpDown.Value)
             {
                 MessageBox.Show("главная диагональ содержит нули,\n" +
@@ -123,7 +131,7 @@ namespace WinForm_App
 
             //получаем решение перемножением обращенной матрицы
             //на правую часть
-            SparseMatrixOfRealNumbers X = SparseMatrixOfRealNumbers.MultiplyMatrixes(V, A);
+            SparseMatrix X = SparseMatrix.MultiplyMatrixes(V, A);
 
             //запись решения в вектор справа
             for (int i = 0; i < B.Power; i++)

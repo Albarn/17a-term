@@ -1,0 +1,11 @@
+F:\repos\17a-term\ASD_Course_Project\WinForm App\bin\Release\WinForm App.exe.config
+F:\repos\17a-term\ASD_Course_Project\WinForm App\obj\Release\WinForm_App.Form1.resources
+F:\repos\17a-term\ASD_Course_Project\WinForm App\obj\Release\WinForm_App.Properties.Resources.resources
+F:\repos\17a-term\ASD_Course_Project\WinForm App\obj\Release\WinForm App.csproj.GenerateResource.Cache
+F:\repos\17a-term\ASD_Course_Project\WinForm App\bin\Release\WinForm App.exe
+F:\repos\17a-term\ASD_Course_Project\WinForm App\bin\Release\WinForm App.pdb
+F:\repos\17a-term\ASD_Course_Project\WinForm App\bin\Release\Class Library.dll
+F:\repos\17a-term\ASD_Course_Project\WinForm App\bin\Release\Class Library.pdb
+F:\repos\17a-term\ASD_Course_Project\WinForm App\obj\Release\WinForm App.csprojResolveAssemblyReference.cache
+F:\repos\17a-term\ASD_Course_Project\WinForm App\obj\Release\WinForm App.exe
+F:\repos\17a-term\ASD_Course_Project\WinForm App\obj\Release\WinForm App.pdb

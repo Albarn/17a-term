@@ -1,0 +1,4 @@
+F:\repos\17a-term\ASD_Course_Project\Class Library\bin\Release\Class Library.dll
+F:\repos\17a-term\ASD_Course_Project\Class Library\bin\Release\Class Library.pdb
+F:\repos\17a-term\ASD_Course_Project\Class Library\obj\Release\Class Library.dll
+F:\repos\17a-term\ASD_Course_Project\Class Library\obj\Release\Class Library.pdb

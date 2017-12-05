@@ -3,17 +3,17 @@
     /// <summary>
     /// ячейка разряженной матрицы
     /// </summary>
-    public class NodeOfSparseMatrix
+    public class CellOfSparseMatrix
     {
         /// <summary>
         /// верхняя ячейка
         /// </summary>
-        public NodeOfSparseMatrix Up;
+        public CellOfSparseMatrix Up;
 
         /// <summary>
         /// ячейка слева
         /// </summary>
-        public NodeOfSparseMatrix Left;
+        public CellOfSparseMatrix Left;
 
         /// <summary>
         /// номер строки в матрице
@@ -36,14 +36,14 @@
         /// <param name="row">номер строки</param>
         /// <param name="col">номер столбца</param>
         /// <param name="val">значение</param>
-        public NodeOfSparseMatrix(int row, int col, double val = 0)
+        public CellOfSparseMatrix(int row, int col, double val = 0)
         {
             //заполняем поля и добавляем конечные узлы
             Row = row;
             Col = col;
             this.val = val;
-            Up = new NodeOfSparseMatrix(this, false);
-            Left = new NodeOfSparseMatrix(this, true);
+            Up = new CellOfSparseMatrix(this, false);
+            Left = new CellOfSparseMatrix(this, true);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@
         /// </summary>
         /// <param name="c">соседняя ячейка</param>
         /// <param name="isRow">это строковый узел</param>
-        NodeOfSparseMatrix(NodeOfSparseMatrix c, bool isRow)
+        CellOfSparseMatrix(CellOfSparseMatrix c, bool isRow)
         {
             //если строковый
             if (isRow)

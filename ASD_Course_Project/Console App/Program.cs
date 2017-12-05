@@ -7,7 +7,7 @@ namespace Console_App
     {
         static void Main()
         {
-            SparseMatrixOfRealNumbers m = new SparseMatrixOfRealNumbers();
+            SparseMatrix m = new SparseMatrix();
             do
             {
                 int r, c, v;
@@ -21,7 +21,7 @@ namespace Console_App
                 Console.Write("stop?");
             } while (Console.ReadLine() != "Y");
             m.InvertMatrix();
-            SparseMatrixOfRealNumbers m2 = new SparseMatrixOfRealNumbers();
+            SparseMatrix m2 = new SparseMatrix();
             do
             {
                 int r, c, v;
@@ -34,7 +34,7 @@ namespace Console_App
                 m2[r, c] = v;
                 Console.Write("stop?");
             } while (Console.ReadLine() != "Y");
-            SparseMatrixOfRealNumbers er = SparseMatrixOfRealNumbers.MultiplyMatrixes(m, m2);
+            SparseMatrix er = SparseMatrix.MultiplyMatrixes(m, m2);
             return;
         }
     }
