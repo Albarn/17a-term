@@ -37,6 +37,8 @@ namespace glAxes3D
                 { 1 } };
         }
 
+        public double oy = 0;
+
         public override void OnRender()
         {
             glClearColor(BackColor);
@@ -51,6 +53,23 @@ namespace glAxes3D
                 glViewport(0, (Height - Width) / 2, Width, Width);
             glOrtho(-2, 2, -2, 2, -2, 2);
 
+            glEnable(GL_DEPTH_TEST);
+
+            glPushMatrix();
+
+            //освещение
+            glEnable(GL_LIGHTING);
+            glEnable(GL_LIGHT0);
+            float[] lightpos = { 0.3f, 0.3f, 0, 0 };
+            glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+            float[] color = { 0.5f, 1, 0 };
+            glLightfv(GL_LIGHT0, GL_COLOR, color);
+            glColorMaterial(GL_FRONT_AND_BACK, GL_EMISSION);
+            glEnable(GL_COLOR_MATERIAL);
+            glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
+            glPopMatrix();
+
             double size = 1.5;
             glRotated(rx, 1, 0, 0);
             glRotated(ry, 0, 1, 0);
@@ -58,6 +77,7 @@ namespace glAxes3D
             DrawAxes(size, 3);
 
             //обновление положения точек
+            //начальная позиция
             O1 = new double[,] {
                 { c },
                 { 0 },
@@ -79,6 +99,7 @@ namespace glAxes3D
                 { 0 },
                 { 1 } };
 
+            //расчет изменений
             double t = Math.Acos((0.52 - s * s) / 0.48);
 
             A = MulMatrixes(Txy(-C[0, 0], -C[1, 0]), A, 4, 1, 4);
@@ -88,6 +109,13 @@ namespace glAxes3D
 
             B = MulMatrixes(Rz((Math.PI / 2 - t)), B, 4, 1, 4);
 
+            //поворот относительно оси ОY
+            A = MulMatrixes(Ry(oy), A, 4, 1, 4);
+            B = MulMatrixes(Ry(oy), B, 4, 1, 4);
+            C = MulMatrixes(Ry(oy), C, 4, 1, 4);
+            O1 = MulMatrixes(Ry(oy), O1, 4, 1, 4);
+
+            //формирование отрезков
             double[,] Sa, Ss, Sb;
             Sa = new double[,]
             {
@@ -111,9 +139,47 @@ namespace glAxes3D
                 {1,1 }
             };
 
-            Segment(Sa, 2, Color.Red);
-            Segment(Sb, 2, Color.Green);
-            Segment(Ss, 2, Color.Blue);
+            //рисование отрезков
+            Segment(Sa, 4, Color.Red);
+            Segment(Sb, 4, Color.Green);
+            Segment(Ss, 4, Color.Blue);
+
+            //рисование точек
+
+            //диски на плоскости
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            IntPtr q = gluNewQuadric();
+            glColor(Color.White);
+            glPushMatrix();
+            glRotated(90, 1, 0, 0);
+            gluDisk(q, 0, 0.1, 10, 10);
+            glPopMatrix();
+
+            q = gluNewQuadric();
+            glPushMatrix();
+            glTranslated(O1[0, 0], O1[1, 0], O1[2, 0]);
+            glRotated(90, 1, 0, 0);
+            gluDisk(q, 0, 0.1, 10, 10);
+            glPopMatrix();
+
+            q = gluNewQuadric();
+            glPushMatrix();
+            glTranslated(A[0,0], A[1,0], A[2,0]);
+            gluSphere(q, 0.03, 10, 10);
+            glPopMatrix();
+
+            //сферы в пространстве
+            q = gluNewQuadric();
+            glPushMatrix();
+            glTranslated(B[0, 0], B[1, 0], B[2, 0]);
+            gluSphere(q, 0.03, 10, 10);
+            glPopMatrix();
+
+            q = gluNewQuadric();
+            glPushMatrix();
+            glTranslated(C[0, 0], C[1, 0], C[2, 0]);
+            gluSphere(q, 0.03, 10, 10);
+            glPopMatrix();
             //OutText("OpenGL version - " + glGetString(GL_VERSION), 10, (3 + FontHeight) * 1);
             //OutText("OpenGL vendor - " + glGetString(GL_VENDOR), 10, (3 + FontHeight) * 2);
             // OutText( "Cyrilic test  - ъЪ эЭ юЮ яЯ ёЁ іІ їЇ", 10,(3 + FontHeight) * 3);
@@ -215,14 +281,16 @@ namespace glAxes3D
         {
             glLineWidth(w);
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
             glBegin(GL_LINES);
-            glVertex3d(-size / 10, 0, 0);
-            glVertex3d(size, 0, 0);
-            glVertex3d(0, -size / 10, 0);
-            glVertex3d(0, size, 0);
-            glVertex3d(0, 0, -size / 10);
-            glVertex3d(0, 0, size);
+                glVertex3d(-size / 10, 0, 0);
+                glVertex3d(size, 0, 0);
+                glVertex3d(0, -size / 10, 0);
+                glVertex3d(0, size, 0);
+                glVertex3d(0, 0, -size / 10);
+                glVertex3d(0, 0, size);
             glEnd();
+
             OutText("X", size, 0, 0);
             OutText("Y", 0, size, 0);
             OutText("Z", 0, 0, size);
